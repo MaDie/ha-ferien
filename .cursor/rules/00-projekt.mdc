@@ -1,0 +1,11 @@
+---
+description: Projektgrundlagen ha-ferien (Home-Assistant-Integration "Ferien")
+alwaysApply: true
+---
+
+- Vor jeder Aufgabe `AGENTS.md` lesen. Sie ist verbindlich; Hintergrund in `docs/plan.md`, Pipeline in `docs/ci-cd.md`, Reihenfolge in `docs/roadmap.md`.
+- Niemals xhigh effort und niemals fast mode verwenden (weder selbst noch bei Subagents oder Cloud Agents).
+- Domain `ferien`, Anzeigename „Ferien – Schulferien & Feiertage“. Einzige Datenquelle: `https://schulferienrechner.de/api/v1`. Solange die API fehlt, gegen `tests/fixtures/` entwickeln.
+- Status „in Planung“: Code nur schreiben, wenn die Aufgabe es verlangt, und nur für den aktuellen Meilenstein der Roadmap.
+- Texte kurz und konkret, Deutsch (UI zusätzlich Englisch). Keine Werbe- oder KI-Floskeln, keine Emojis.
+- Nichts veröffentlichen (Repo öffentlich, Release, HACS-PR, Forenbeiträge) ohne Freigabe von Matthias.

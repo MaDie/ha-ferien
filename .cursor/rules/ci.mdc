@@ -1,0 +1,13 @@
+---
+description: Regeln für GitHub Actions, Dependabot und Release
+globs: .github/**
+alwaysApply: false
+---
+
+- Spezifikation in `docs/ci-cd.md` ist verbindlich: `ci.yml`, `release.yml`, `nightly.yml`, `dependabot.yml`.
+- Actions auf Major-Tags von vertrauenswürdigen Quellen (`actions/*`, `home-assistant/actions`, `hacs/action`) oder auf Commit-SHA pinnen.
+- `permissions` pro Workflow minimal setzen (Standard `contents: read`; nur `release.yml` bekommt `contents: write`).
+- Keine Secrets nötig außer dem automatischen `GITHUB_TOKEN`. Keine Secrets in Logs ausgeben.
+- `concurrency` mit `cancel-in-progress: true` für Push/PR-Läufe.
+- Python-Version und HA-Versionen zentral als Matrix-Werte pflegen, nicht in mehreren Jobs verstreut.
+- Workflows nicht anlegen, bevor Code existiert, den sie prüfen können (Roadmap M1).

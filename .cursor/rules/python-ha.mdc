@@ -1,0 +1,18 @@
+---
+description: Regeln für den Integrationscode unter custom_components/ferien
+globs: custom_components/**/*.py, custom_components/**/*.json, custom_components/**/*.yaml
+alwaysApply: false
+---
+
+- Alles async. Keine blockierenden Aufrufe im Event-Loop; HTTP nur über `async_get_clientsession(hass)`, Session in `api.py` injiziert, Timeout 30 s, `User-Agent: ha-ferien/<version> (+https://github.com/MaDie/ha-ferien)`.
+- `from __future__ import annotations`, vollständige Typen, `mypy --strict` und `ruff` ohne Befund.
+- Schichten: `api.py` (HTTP + Parsing in Dataclasses) → `coordinator.py` (Abruf, ETag, Store-Cache, Mitternacht) → `logic.py` (reine Datumslogik, keine HA-Imports) → Plattformen (`binary_sensor.py`, `sensor.py`, `calendar.py`).
+- Runtime-Daten in `entry.runtime_data`, nicht in `hass.data`. Entitäten erben von `CoordinatorEntity`.
+- Jede Entität: `has_entity_name = True`, `translation_key`, `unique_id = f"{entry.entry_id}_{key}"`, entity_id sprachunabhängig `ferien_<land>_<key>`.
+- Datumsberechnung immer in Europe/Berlin über `homeassistant.util.dt`. API-`ende` ist inklusiv, Kalender-`end` exklusiv.
+- Fehlen Daten für ein Datum: `unavailable`/`unknown`. Nie `off` oder „keine Ferien“ als Ersatz.
+- Eigene Tage im HA-`Store`, nie in Dateien im Integrationsordner. Keine YAML-Konfiguration.
+- Keine neuen Abhängigkeiten in `manifest.json` (`requirements: []`).
+- Nutzertexte nur in `strings.json` + `translations/de.json` + `translations/en.json`. Bei neuen Keys alle drei pflegen.
+- Änderungen an Domain, Entity-Keys oder unique_id-Schema nur mit `async_migrate_entry` und Test.
+- `quality_scale.yaml` bei betroffenen Regeln aktualisieren.

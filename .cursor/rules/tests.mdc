@@ -1,0 +1,13 @@
+---
+description: Regeln für Tests und Fixtures
+globs: tests/**
+alwaysApply: false
+---
+
+- `pytest` mit `pytest-homeassistant-custom-component` (Version passend zur Ziel-HA-Version). Zeit mit der `freezer`-Fixture steuern.
+- API immer mocken (`aioclient_mock`). Keine echten Netzaufrufe in Unit-Tests; der Vertragstest gegen die echte API läuft nur in `nightly.yml` und ist mit `@pytest.mark.contract` markiert und standardmäßig abgewählt.
+- Fixtures in `tests/fixtures/*.json` folgen exakt dem API-Vertrag in `AGENTS.md` (später `openapi.json`). Nur echte, plausible Termine (z. B. Bayern 2026/27), keine erfundenen Feldnamen.
+- `logic.py` mit reinen Unit-Tests ohne `hass`-Fixture testen, parametrisiert über Grenzfälle (Freitag vor Ferien, Wochenende, Feiertag in Ferien, Jahreswechsel, Sommerzeitumstellung).
+- Pflichtfälle aus `AGENTS.md` (Config Flow, Sensoren, Mitternacht, API-Ausfall, Cache, Actions, Entity-IDs de/en, Diagnostics) dürfen nicht entfernt werden.
+- Snapshots mit `syrupy`; Snapshot-Änderungen im PR begründen.
+- Abdeckung `custom_components/ferien` ≥ 95 %.
