@@ -34,6 +34,7 @@ def test_land_wird_aus_code_iso_und_slug() -> None:
     assert normalisiere_land("DE-TH") == "TH"
     assert normalisiere_land("Baden-Württemberg") == "BW"
     assert normalisiere_land("thueringen") == "TH"
+    assert normalisiere_land("nrw") == "NW"
     assert normalisiere_land(None) is None
     assert normalisiere_land("atlantis") is None
 

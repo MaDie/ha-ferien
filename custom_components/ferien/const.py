@@ -67,7 +67,7 @@ SERVICE_TERMINE_ABRUFEN: Final = "termine_abrufen"
 SERVICE_SCHULTAG_PRUEFEN: Final = "schultag_pruefen"
 SERVICE_AKTUALISIEREN: Final = "aktualisieren"
 
-# code, Name, ISO, Slug. Slugs wie bei der bestehenden Seite.
+# code, Name, ISO, Slug. Slugs wie von /api/v1/laender.
 LAENDER: Final[tuple[tuple[str, str, str, str], ...]] = (
     ("BW", "Baden-Württemberg", "DE-BW", "baden-wuerttemberg"),
     ("BY", "Bayern", "DE-BY", "bayern"),
@@ -78,7 +78,7 @@ LAENDER: Final[tuple[tuple[str, str, str, str], ...]] = (
     ("HE", "Hessen", "DE-HE", "hessen"),
     ("MV", "Mecklenburg-Vorpommern", "DE-MV", "mecklenburg-vorpommern"),
     ("NI", "Niedersachsen", "DE-NI", "niedersachsen"),
-    ("NW", "Nordrhein-Westfalen", "DE-NW", "nordrhein-westfalen"),
+    ("NW", "Nordrhein-Westfalen", "DE-NW", "nrw"),
     ("RP", "Rheinland-Pfalz", "DE-RP", "rheinland-pfalz"),
     ("SL", "Saarland", "DE-SL", "saarland"),
     ("SN", "Sachsen", "DE-SN", "sachsen"),

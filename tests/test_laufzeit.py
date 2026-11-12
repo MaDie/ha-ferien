@@ -50,7 +50,7 @@ async def test_schultag_am_elften(hass, aioclient_mock) -> None:
     assert naechste.attributes["name"] == "Weihnachtsferien"
     assert naechste.attributes["frei_von"] == "2026-12-24"
     assert naechste.attributes["frei_bis"] == "2027-01-10"
-    assert _zustand(hass, "sensor.ferien_by_daten_bis").state == "2028-12-31"
+    assert _zustand(hass, "sensor.ferien_by_daten_bis").state == "2028-09-11"
     assert _zustand(hass, "calendar.ferien_by").state == STATE_OFF
 
 
@@ -153,7 +153,7 @@ async def test_englische_entity_ids(hass, aioclient_mock) -> None:
 
 async def test_regionaler_feiertag(hass, aioclient_mock, freezer) -> None:
     """Augsburg schaltet den Feiertag, Schulfrei bleibt wegen der Sommerferien an."""
-    await _am(hass, freezer, "2026-08-08T12:00:00+02:00")
+    await _am(hass, freezer, "2027-08-08T12:00:00+02:00")
     await richte_ein(hass, aioclient_mock)
     assert _zustand(hass, "binary_sensor.ferien_by_feiertag_heute").state == STATE_OFF
     assert _zustand(hass, "binary_sensor.ferien_by_schulfrei_heute").state == STATE_ON
@@ -243,7 +243,7 @@ async def test_ohne_daten_nicht_aus(hass, aioclient_mock, freezer) -> None:
         == STATE_UNAVAILABLE
     )
     assert _zustand(hass, "sensor.ferien_by_tage_bis_ferien").state == STATE_UNAVAILABLE
-    assert _zustand(hass, "sensor.ferien_by_daten_bis").state == "2028-12-31"
+    assert _zustand(hass, "sensor.ferien_by_daten_bis").state == "2028-09-11"
     await _am(hass, freezer, "2026-07-04T12:00:00+02:00")
     assert _zustand(hass, "binary_sensor.ferien_by_schulfrei_heute").state == STATE_ON
     assert (
@@ -256,7 +256,7 @@ async def test_kein_naechster_feiertag_ist_unknown(
     hass, aioclient_mock, freezer
 ) -> None:
     """Am letzten Tag der Abdeckung gibt es keinen nächsten Feiertag."""
-    await _am(hass, freezer, "2028-12-31T12:00:00+01:00")
+    await _am(hass, freezer, "2028-09-11T12:00:00+02:00")
     await richte_ein(hass, aioclient_mock)
     assert _zustand(hass, "sensor.ferien_by_naechster_feiertag").state == STATE_UNKNOWN
     assert _zustand(hass, "sensor.ferien_by_naechster_schultag").state == STATE_UNKNOWN

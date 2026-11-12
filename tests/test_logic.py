@@ -105,7 +105,7 @@ def test_mittwoch_ist_schultag() -> None:
     feiertag = naechster_feiertag(tag, TERMINE, regionale=False)
     assert feiertag is not None
     assert feiertag.datum == date(2026, 12, 25)
-    assert feiertag.name == "1. Weihnachtstag"
+    assert feiertag.name == "1. Weihnachtsfeiertag"
 
 
 def test_buss_und_bettag_ist_kein_feiertag() -> None:
@@ -127,7 +127,7 @@ def test_feiertag_im_ferienzeitraum_nennt_ferien_als_grund() -> None:
     assert bild.grund is Grund.FERIEN
     assert bild.ferien is True
     assert bild.feiertag is True
-    assert bild.feiertag_name == "1. Weihnachtstag"
+    assert bild.feiertag_name == "1. Weihnachtsfeiertag"
 
 
 def test_christi_himmelfahrt_ausserhalb_der_ferien() -> None:
@@ -151,20 +151,21 @@ def test_pfingstmontag_liegt_vor_dem_offiziellen_start() -> None:
     assert tage_bis_ferien(tag, TERMINE) == 0
 
 
-def test_unbekannter_typ_bleibt_ferien() -> None:
-    """Frühjahrsferien stehen nicht in der bekannten Typ-Liste."""
+def test_fruehjahrsferien_sind_winterferien() -> None:
+    """Die API führt die bayerischen Frühjahrsferien als Typ winterferien."""
     tag = date(2027, 2, 8)
     bild = _bild(tag)
     assert bild.ferien is True
     assert bild.grund is Grund.FERIEN
+    assert bild.name == "Frühjahrsferien"
     periode = naechste_ferien(tag, TERMINE)
     assert periode is not None
-    assert periode.typ == "fruehjahrsferien"
+    assert periode.typ == "winterferien"
 
 
 def test_regionaler_feiertag_schaltet_nur_den_feiertag() -> None:
     """Augsburg liegt in den Sommerferien. Schulfrei bleibt an."""
-    tag = date(2026, 8, 8)
+    tag = date(2027, 8, 8)
     ohne = _bild(tag, regionale=False)
     mit = _bild(tag, regionale=True)
     assert ohne.feiertag is False

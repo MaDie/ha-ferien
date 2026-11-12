@@ -373,7 +373,7 @@ async def test_services_filtern_und_aktualisieren_alles(hass, aioclient_mock) ->
         "termine_abrufen",
         {
             "config_entry_id": eintrag.entry_id,
-            "von": "2026-08-01",
+            "von": "2026-10-17",
             "bis": "2026-11-20",
             "typen": ["feiertag", "eigener_tag"],
         },

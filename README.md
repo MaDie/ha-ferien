@@ -61,7 +61,15 @@ Eintrag löschen. Damit verschwinden Entitäten, eigene Tage und der Cache diese
 
 - Ein Eintrag je Bundesland, keine Kombination mehrerer Länder
 - Berufliche Schulen sind nicht enthalten
-- Die API unter `/api/v1` wird noch aufgebaut. Bis sie da ist, entwickelt die Integration gegen die Fixtures in `tests/fixtures/`
+
+## Fehler
+
+- `unavailable` oder `unknown` heißt: für dieses Datum liegen keine Termine im Cache. Das ist kein Schultag. Liegt das Datum vor dem Bestand oder hinter `daten_bis`, ist das der Grund. Eine Reparatur erscheint, wenn der Bestand in weniger als 60 Tagen endet.
+- Zustände ändern sich um Mitternacht Europe/Berlin, ohne neuen Abruf. Automationen, die „morgen“ selbst ausrechnen, folgen der Zeitzone von Home Assistant. Die sollte Europe/Berlin sein.
+- Nach einem Ausfall der API bleiben die letzten Daten stehen. Das ist so vorgesehen. Nach 14 Tagen ohne erfolgreichen Abruf erscheint eine Reparatur. `ferien.aktualisieren` holt sofort. `letzte_aktualisierung` und `datenstand` stehen bei den Diagnose-Sensoren.
+- Die Einrichtung bleibt hängen, wenn beim ersten Start weder Netz noch Cache da sind. Es wird kein Eintrag mit leeren Zuständen angelegt. Netz herstellen und erneut versuchen.
+- Ein eigener Tag wird über sein Startdatum ersetzt oder gelöscht. Ein späteres Datum im selben Zeitraum trifft ihn nicht.
+- Nach einem Bundeslandwechsel behält die `entity_id` das alte Kürzel, bis sie umbenannt wird. Die Entität selbst zeigt das neue Land.
 
 ## Mitarbeit
 
@@ -76,6 +84,8 @@ Data comes only from schulferienrechner.de. It is derived from the OpenHolidays 
 Download runs once a day between 03:00 and 05:00 local time. At midnight Europe/Berlin the states are recomputed locally. If the API fails, the cached data stays. A repair issue appears after 14 days without a successful download, or when the data ends within 60 days.
 
 Reconfigure keeps the entities. The `entity_id` keeps the previous state code until you rename it. Removing the entry deletes its entities, custom days and cache.
+
+`unavailable` or `unknown` means the cache has no data for that date. It does not mean school is in session. The first setup waits instead of creating an entry when there is neither network nor cache. `ferien.aktualisieren` fetches immediately. Custom days are replaced and removed by their start date. Automations that compute “tomorrow” use Home Assistant’s time zone, which should be Europe/Berlin.
 
 The integration is not published yet.
 

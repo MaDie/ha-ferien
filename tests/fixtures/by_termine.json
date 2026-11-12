@@ -5,20 +5,9 @@
     "slug": "bayern",
     "name": "Bayern"
   },
-  "von": "2026-08-01",
-  "bis": "2028-12-31",
+  "von": "2026-10-17",
+  "bis": "2028-09-11",
   "ferien": [
-    {
-      "id": "by-sommerferien-2026-08-03",
-      "name": "Sommerferien",
-      "typ": "sommerferien",
-      "start": "2026-08-03",
-      "ende": "2026-09-14",
-      "frei_von": "2026-08-01",
-      "frei_bis": "2026-09-14",
-      "bestaetigt": true,
-      "hinweis": null
-    },
     {
       "id": "by-herbstferien-2026-11-02",
       "name": "Herbstferien",
@@ -42,9 +31,9 @@
       "hinweis": null
     },
     {
-      "id": "by-fruehjahrsferien-2027-02-08",
+      "id": "by-winterferien-2027-02-08",
       "name": "Frühjahrsferien",
-      "typ": "fruehjahrsferien",
+      "typ": "winterferien",
       "start": "2027-02-08",
       "ende": "2027-02-12",
       "frei_von": "2027-02-06",
@@ -108,9 +97,9 @@
       "hinweis": null
     },
     {
-      "id": "by-fruehjahrsferien-2028-02-28",
+      "id": "by-winterferien-2028-02-28",
       "name": "Frühjahrsferien",
-      "typ": "fruehjahrsferien",
+      "typ": "winterferien",
       "start": "2028-02-28",
       "ende": "2028-03-03",
       "frei_von": "2028-02-26",
@@ -178,30 +167,6 @@
   ],
   "feiertage": [
     {
-      "name": "Augsburger Friedensfest",
-      "datum": "2026-08-08",
-      "bundesweit": false,
-      "teilweise": false,
-      "lokal": true,
-      "hinweis": null
-    },
-    {
-      "name": "Mariä Himmelfahrt",
-      "datum": "2026-08-15",
-      "bundesweit": false,
-      "teilweise": true,
-      "lokal": false,
-      "hinweis": null
-    },
-    {
-      "name": "Tag der Deutschen Einheit",
-      "datum": "2026-10-03",
-      "bundesweit": true,
-      "teilweise": false,
-      "lokal": false,
-      "hinweis": null
-    },
-    {
       "name": "Allerheiligen",
       "datum": "2026-11-01",
       "bundesweit": false,
@@ -210,7 +175,7 @@
       "hinweis": null
     },
     {
-      "name": "1. Weihnachtstag",
+      "name": "1. Weihnachtsfeiertag",
       "datum": "2026-12-25",
       "bundesweit": true,
       "teilweise": false,
@@ -218,7 +183,7 @@
       "hinweis": null
     },
     {
-      "name": "2. Weihnachtstag",
+      "name": "2. Weihnachtsfeiertag",
       "datum": "2026-12-26",
       "bundesweit": true,
       "teilweise": false,
@@ -293,17 +258,17 @@
       "name": "Augsburger Friedensfest",
       "datum": "2027-08-08",
       "bundesweit": false,
-      "teilweise": false,
+      "teilweise": true,
       "lokal": true,
-      "hinweis": null
+      "hinweis": "nur lokal / einzelne Kommunen"
     },
     {
-      "name": "Mariä Himmelfahrt",
+      "name": "Mariä Himmelfahrt (teilweise)",
       "datum": "2027-08-15",
       "bundesweit": false,
       "teilweise": true,
       "lokal": false,
-      "hinweis": null
+      "hinweis": "nur in Teilen des Landes"
     },
     {
       "name": "Tag der Deutschen Einheit",
@@ -322,7 +287,7 @@
       "hinweis": null
     },
     {
-      "name": "1. Weihnachtstag",
+      "name": "1. Weihnachtsfeiertag",
       "datum": "2027-12-25",
       "bundesweit": true,
       "teilweise": false,
@@ -330,7 +295,7 @@
       "hinweis": null
     },
     {
-      "name": "2. Weihnachtstag",
+      "name": "2. Weihnachtsfeiertag",
       "datum": "2027-12-26",
       "bundesweit": true,
       "teilweise": false,
@@ -405,52 +370,21 @@
       "name": "Augsburger Friedensfest",
       "datum": "2028-08-08",
       "bundesweit": false,
-      "teilweise": false,
+      "teilweise": true,
       "lokal": true,
-      "hinweis": null
+      "hinweis": "nur lokal / einzelne Kommunen"
     },
     {
-      "name": "Mariä Himmelfahrt",
+      "name": "Mariä Himmelfahrt (teilweise)",
       "datum": "2028-08-15",
       "bundesweit": false,
       "teilweise": true,
       "lokal": false,
-      "hinweis": null
-    },
-    {
-      "name": "Tag der Deutschen Einheit",
-      "datum": "2028-10-03",
-      "bundesweit": true,
-      "teilweise": false,
-      "lokal": false,
-      "hinweis": null
-    },
-    {
-      "name": "Allerheiligen",
-      "datum": "2028-11-01",
-      "bundesweit": false,
-      "teilweise": false,
-      "lokal": false,
-      "hinweis": null
-    },
-    {
-      "name": "1. Weihnachtstag",
-      "datum": "2028-12-25",
-      "bundesweit": true,
-      "teilweise": false,
-      "lokal": false,
-      "hinweis": null
-    },
-    {
-      "name": "2. Weihnachtstag",
-      "datum": "2028-12-26",
-      "bundesweit": true,
-      "teilweise": false,
-      "lokal": false,
-      "hinweis": null
+      "hinweis": "nur in Teilen des Landes"
     }
   ],
   "quelle": "OpenHolidays API, aufbereitet von schulferienrechner.de",
   "lizenz": "ODbL-1.0",
-  "datenstand": "2026-11-11T03:00:00+01:00"
+  "datenstand": "2026-10-29T05:24:42.278Z",
+  "hinweis": "Keine amtliche Quelle. Verbindlich sind die Angaben der Kultusministerien."
 }
