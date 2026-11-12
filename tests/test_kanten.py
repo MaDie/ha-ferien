@@ -12,7 +12,7 @@ from homeassistant.config_entries import (
     SOURCE_USER,
     ConfigEntryState,
 )
-from homeassistant.const import STATE_ON
+from homeassistant.const import STATE_ON, STATE_UNAVAILABLE
 from homeassistant.exceptions import HomeAssistantError, ServiceValidationError
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 
@@ -243,6 +243,15 @@ async def test_client_fehlerbilder(hass, aioclient_mock) -> None:
     assert termine.land_code == "BY"
 
 
+async def test_verdrehtes_intervall_ohne_cache_wartet(hass, aioclient_mock) -> None:
+    """Ohne Cache bleibt ein unbrauchbares Intervall ein Setup-Retry."""
+    payload = lade_fixture()
+    payload["ferien"][0]["start"] = "2026-11-06"
+    payload["ferien"][0]["ende"] = "2026-11-02"
+    eintrag = await richte_ein(hass, aioclient_mock, payload=payload)
+    assert eintrag.state is ConfigEntryState.SETUP_RETRY
+
+
 async def test_erster_abruf_304_und_429(hass, aioclient_mock) -> None:
     """Ohne Cache bleibt der Eintrag beim Warten. 304 ist dann kein Erfolg."""
     eintrag = await richte_ein(hass, aioclient_mock, status=304, content=b"")
@@ -275,7 +284,9 @@ async def test_retry_after_haelt_den_abruf_an(hass, aioclient_mock, freezer) -> 
     await hass.async_block_till_done()
     await coordinator._geplanter_abruf(ziel)
     assert aioclient_mock.call_count == 1
-    assert hass.states.get("sensor.ferien_by_tage_bis_ferien").state == "42"
+    assert (
+        hass.states.get("sensor.ferien_by_tage_bis_ferien").state == STATE_UNAVAILABLE
+    )
 
 
 async def test_reconfigure_gleich_oder_unbekannt(hass, aioclient_mock) -> None:
@@ -410,7 +421,9 @@ async def test_services_filtern_und_aktualisieren_alles(hass, aioclient_mock) ->
     mock_termine(aioclient_mock, exc=TimeoutError())
     with pytest.raises(HomeAssistantError):
         await hass.services.async_call(DOMAIN, "aktualisieren", {}, blocking=True)
-    assert hass.states.get("sensor.ferien_by_tage_bis_ferien").state == "43"
+    assert (
+        hass.states.get("sensor.ferien_by_tage_bis_ferien").state == STATE_UNAVAILABLE
+    )
 
     eintrag.runtime_data = None
     with pytest.raises(ServiceValidationError):

@@ -2,8 +2,10 @@
 
 from __future__ import annotations
 
+import logging
 from datetime import date, datetime
 
+import pytest
 from homeassistant.config_entries import ConfigEntryState
 from homeassistant.const import STATE_OFF, STATE_ON, STATE_UNAVAILABLE, STATE_UNKNOWN
 from homeassistant.helpers import issue_registry as ir
@@ -197,11 +199,10 @@ async def test_cache_ohne_netz_und_etag(hass, aioclient_mock, freezer) -> None:
 
 
 async def test_ausfaelle_einzeln(hass, aioclient_mock, freezer) -> None:
-    """Jeder Fehler lässt den Cache in Kraft. 429 hält die nächste Anfrage auf."""
+    """Fehler machen unavailable. 429 hält die nächste Anfrage auf, der Cache bleibt."""
     await richte_ein(hass, aioclient_mock)
     eintrag = hass.config_entries.async_entries(DOMAIN)[0]
     koordinaten = eintrag.runtime_data.coordinator
-    vorher = _zustand(hass, "binary_sensor.ferien_by_schulfrei_heute").state
 
     for kwargs in (
         {"exc": TimeoutError()},
@@ -213,7 +214,10 @@ async def test_ausfaelle_einzeln(hass, aioclient_mock, freezer) -> None:
         await _am(hass, freezer, "2026-11-12T16:00:00+01:00")
         assert await koordinaten.async_aktualisieren() is False
         await hass.async_block_till_done()
-        assert _zustand(hass, "binary_sensor.ferien_by_schulfrei_heute").state == vorher
+        assert (
+            _zustand(hass, "binary_sensor.ferien_by_schulfrei_heute").state
+            == STATE_UNAVAILABLE
+        )
 
     aioclient_mock.clear_requests()
     aioclient_mock.get(
@@ -227,7 +231,103 @@ async def test_ausfaelle_einzeln(hass, aioclient_mock, freezer) -> None:
     await koordinaten.async_request_refresh()
     await hass.async_block_till_done()
     assert aioclient_mock.call_count == aufrufe
-    assert _zustand(hass, "binary_sensor.ferien_by_schulfrei_heute").state == vorher
+    assert (
+        _zustand(hass, "binary_sensor.ferien_by_schulfrei_heute").state
+        == STATE_UNAVAILABLE
+    )
+    assert eintrag.state is ConfigEntryState.LOADED
+
+
+async def test_tagesabruf_holt_vor_ablauf_der_24_stunden(hass, aioclient_mock) -> None:
+    """03:17 holt, auch wenn der Startabruf keine 24 Stunden her ist."""
+    eintrag = await richte_ein(hass, aioclient_mock)
+    aioclient_mock.clear_requests()
+    mock_termine(aioclient_mock, status=304, content=b"", etag="by-1")
+    await eintrag.runtime_data.coordinator._geplanter_abruf(
+        datetime.fromisoformat("2026-11-11T12:00:00+01:00")
+    )
+    await hass.async_block_till_done()
+    assert aioclient_mock.call_count == 1
+    assert aioclient_mock.mock_calls[0][3]["If-None-Match"] == "by-1"
+    assert _zustand(hass, "sensor.ferien_by_tage_bis_ferien").state == "43"
+
+
+async def test_retry_after_holt_danach_nach(hass, aioclient_mock, freezer) -> None:
+    """Nach Retry-After folgt ein Versuch, nicht erst am nächsten Morgen."""
+    await richte_ein(hass, aioclient_mock)
+    aioclient_mock.clear_requests()
+    aioclient_mock.get(
+        "https://schulferienrechner.de/api/v1/laender/BY/termine",
+        status=429,
+        headers={"Retry-After": "60"},
+    )
+    coordinator = hass.config_entries.async_entries(DOMAIN)[0].runtime_data.coordinator
+    assert await coordinator.async_aktualisieren() is False
+    assert (
+        _zustand(hass, "binary_sensor.ferien_by_schulfrei_heute").state
+        == STATE_UNAVAILABLE
+    )
+    aioclient_mock.clear_requests()
+    mock_termine(aioclient_mock, status=304, content=b"", etag="by-1")
+    await _am(hass, freezer, "2026-11-11T12:01:05+01:00")
+    assert aioclient_mock.call_count == 1
+    assert _zustand(hass, "binary_sensor.ferien_by_schulfrei_heute").state == STATE_OFF
+
+
+async def test_verdrehtes_intervall_macht_unavailable(hass, aioclient_mock) -> None:
+    """start nach ende ist ein Abruffehler. Der Eintrag bleibt geladen."""
+    eintrag = await richte_ein(hass, aioclient_mock)
+    payload = lade_fixture()
+    payload["ferien"][0]["start"] = "2026-11-06"
+    payload["ferien"][0]["ende"] = "2026-11-02"
+    aioclient_mock.clear_requests()
+    mock_termine(aioclient_mock, payload=payload)
+    assert await eintrag.runtime_data.coordinator.async_aktualisieren() is False
+    await hass.async_block_till_done()
+    assert eintrag.state is ConfigEntryState.LOADED
+    assert (
+        _zustand(hass, "binary_sensor.ferien_by_schulfrei_heute").state
+        == STATE_UNAVAILABLE
+    )
+
+
+async def test_ausfall_loggt_einmal_und_die_rueckkehr(
+    hass, aioclient_mock, caplog: pytest.LogCaptureFixture
+) -> None:
+    """Der Coordinator meldet den Ausfall einmal und die Rückkehr einmal."""
+    eintrag = await richte_ein(hass, aioclient_mock)
+    caplog.set_level(logging.INFO, logger="custom_components.ferien.coordinator")
+    caplog.clear()
+    aioclient_mock.clear_requests()
+    mock_termine(aioclient_mock, exc=TimeoutError())
+    coordinator = eintrag.runtime_data.coordinator
+    assert await coordinator.async_aktualisieren() is False
+    assert await coordinator.async_aktualisieren() is False
+    fehler = [
+        record
+        for record in caplog.records
+        if record.levelno >= logging.ERROR and "Error fetching" in record.message
+    ]
+    assert len(fehler) == 1
+    aioclient_mock.clear_requests()
+    mock_termine(aioclient_mock)
+    assert await coordinator.async_aktualisieren() is True
+    assert any("recovered" in record.message for record in caplog.records)
+    assert _zustand(hass, "binary_sensor.ferien_by_schulfrei_heute").state == STATE_OFF
+
+
+async def test_mitternacht_heilt_keinen_ausfall(hass, aioclient_mock, freezer) -> None:
+    """Mitternacht rechnet nur nach einem gelungenen Abruf neu."""
+    await richte_ein(hass, aioclient_mock)
+    aioclient_mock.clear_requests()
+    mock_termine(aioclient_mock, exc=TimeoutError())
+    coordinator = hass.config_entries.async_entries(DOMAIN)[0].runtime_data.coordinator
+    assert await coordinator.async_aktualisieren() is False
+    await _am(hass, freezer, "2026-11-12T00:00:01+01:00")
+    assert (
+        _zustand(hass, "binary_sensor.ferien_by_schulfrei_heute").state
+        == STATE_UNAVAILABLE
+    )
 
 
 async def test_ohne_daten_nicht_aus(hass, aioclient_mock, freezer) -> None:

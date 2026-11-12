@@ -18,7 +18,7 @@ Unterstützt werden die aktuelle stabile Home-Assistant-Version und die vorherig
 - Ferien und Feiertage getrennt, jeweils heute und morgen
 - Nächste Ferien, Tage und Schultage bis dahin, verbleibende Ferientage
 - Letzter, erster und nächster Schultag, nächster Feiertag
-- Kalender mit Ferien, schulfreien Tagen, eigenen Tagen und, abschaltbar, Feiertagen
+- Kalender mit Ferien, schulfreien Tagen, eigenen Tagen und, abschaltbar, Feiertagen. Ferien im Kalender laufen vom ersten bis zum letzten freien Tag. `ferien_heute` gilt nur für den offiziellen Zeitraum.
 - Diagnose: Datenstand, letzte Aktualisierung, Daten bis
 
 Fehlt für ein Datum der Datenbestand, wird die Entität `unavailable` oder `unknown`. Sie wird nicht auf „aus“ gesetzt.
@@ -27,7 +27,7 @@ Fehlt für ein Datum der Datenbestand, wird die Entität `unavailable` oder `unk
 
 Einzige Quelle ist [schulferienrechner.de](https://schulferienrechner.de), Endpunkt `/api/v1`. Die Termine stammen von der [OpenHolidays API](https://www.openholidaysapi.org) und stehen unter der [ODbL 1.0](https://opendatacommons.org/licenses/odbl/1-0/). Keine amtliche Quelle. Verbindlich sind die Angaben der Kultusministerien.
 
-Der Abruf läuft einmal täglich zwischen 03:00 und 05:00 Ortszeit. Um Mitternacht Europe/Berlin werden die Zustände neu gerechnet, ohne Netz. Liegt ein Cache vor, bleibt er bei einem Ausfall der API liegen. Eine Reparatur erscheint, wenn 14 Tage kein Abruf geklappt hat oder die Daten in weniger als 60 Tagen enden.
+Der Abruf läuft einmal täglich zwischen 03:00 und 05:00 Ortszeit, auch wenn der letzte Erfolg weniger als 24 Stunden zurückliegt. Die 24 Stunden gelten für den Start. Um Mitternacht Europe/Berlin werden die Zustände neu gerechnet, ohne Netz. Schlägt ein Abruf fehl, werden die Entitäten `unavailable`. Der Cache bleibt liegen. Ein Neustart innerhalb von 24 Stunden zeigt ihn wieder, ohne Netz. Nach HTTP 429 folgt ein neuer Versuch, sobald `Retry-After` abgelaufen ist. Eine Reparatur erscheint, wenn 14 Tage kein Abruf geklappt hat oder die Daten in weniger als 60 Tagen enden.
 
 ## Optionen
 
@@ -66,7 +66,7 @@ Eintrag löschen. Damit verschwinden Entitäten, eigene Tage und der Cache diese
 
 - `unavailable` oder `unknown` heißt: für dieses Datum liegen keine Termine im Cache. Das ist kein Schultag. Liegt das Datum vor dem Bestand oder hinter `daten_bis`, ist das der Grund. Eine Reparatur erscheint, wenn der Bestand in weniger als 60 Tagen endet.
 - Zustände ändern sich um Mitternacht Europe/Berlin, ohne neuen Abruf. Automationen, die „morgen“ selbst ausrechnen, folgen der Zeitzone von Home Assistant. Die sollte Europe/Berlin sein.
-- Nach einem Ausfall der API bleiben die letzten Daten stehen. Das ist so vorgesehen. Nach 14 Tagen ohne erfolgreichen Abruf erscheint eine Reparatur. `ferien.aktualisieren` holt sofort. `letzte_aktualisierung` und `datenstand` stehen bei den Diagnose-Sensoren.
+- Nach einem fehlgeschlagenen Abruf sind die Entitäten `unavailable`, nicht „aus“. Der Cache bleibt gespeichert. Ein Neustart innerhalb von 24 Stunden lädt ihn ohne Netz. Nach 14 Tagen ohne erfolgreichen Abruf erscheint eine Reparatur. `ferien.aktualisieren` holt sofort.
 - Die Einrichtung bleibt hängen, wenn beim ersten Start weder Netz noch Cache da sind. Es wird kein Eintrag mit leeren Zuständen angelegt. Netz herstellen und erneut versuchen.
 - Ein eigener Tag wird über sein Startdatum ersetzt oder gelöscht. Ein späteres Datum im selben Zeitraum trifft ihn nicht.
 - Nach einem Bundeslandwechsel behält die `entity_id` das alte Kürzel, bis sie umbenannt wird. Die Entität selbst zeigt das neue Land.
@@ -81,11 +81,11 @@ One config entry is one German state. The integration reports whether today and 
 
 Data comes only from schulferienrechner.de. It is derived from the OpenHolidays API under ODbL 1.0 and is not an official source.
 
-Download runs once a day between 03:00 and 05:00 local time. At midnight Europe/Berlin the states are recomputed locally. If the API fails, the cached data stays. A repair issue appears after 14 days without a successful download, or when the data ends within 60 days.
+Download runs once a day between 03:00 and 05:00 local time, even when the last success is less than 24 hours old. The 24 hours apply to startup. At midnight Europe/Berlin the states are recomputed locally. A failed download sets the entities to `unavailable`. The cache stays, and a restart within 24 hours loads it without a network call. After HTTP 429 the next try waits for `Retry-After`. A repair issue appears after 14 days without a successful download, or when the data ends within 60 days. The calendar shows the full free stretch. `ferien_heute` uses the official holiday dates only.
 
 Reconfigure keeps the entities. The `entity_id` keeps the previous state code until you rename it. Removing the entry deletes its entities, custom days and cache.
 
-`unavailable` or `unknown` means the cache has no data for that date. It does not mean school is in session. The first setup waits instead of creating an entry when there is neither network nor cache. `ferien.aktualisieren` fetches immediately. Custom days are replaced and removed by their start date. Automations that compute “tomorrow” use Home Assistant’s time zone, which should be Europe/Berlin.
+`unavailable` or `unknown` means there is no data for that date, or the last download failed. It does not mean school is in session. The first setup waits instead of creating an entry when there is neither network nor cache. `ferien.aktualisieren` fetches immediately. Custom days are replaced and removed by their start date. Automations that compute “tomorrow” use Home Assistant’s time zone, which should be Europe/Berlin.
 
 The integration is not published yet.
 

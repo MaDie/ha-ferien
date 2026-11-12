@@ -154,18 +154,21 @@ def parse_termine(payload: Mapping[str, Any]) -> Termine:
             key=lambda feiertag: (feiertag.datum, feiertag.name),
         )
     )
-    return Termine(
-        land_code=code,
-        land_name=name.strip(),
-        von=von,
-        bis=bis,
-        ferien=ferien,
-        schulfrei=schulfrei,
-        feiertage=feiertage,
-        quelle=_text(payload.get("quelle")),
-        lizenz=_text(payload.get("lizenz")),
-        datenstand=_zeitpunkt(payload.get("datenstand")),
-    )
+    try:
+        return Termine(
+            land_code=code,
+            land_name=name.strip(),
+            von=von,
+            bis=bis,
+            ferien=ferien,
+            schulfrei=schulfrei,
+            feiertage=feiertage,
+            quelle=_text(payload.get("quelle")),
+            lizenz=_text(payload.get("lizenz")),
+            datenstand=_zeitpunkt(payload.get("datenstand")),
+        )
+    except ValueError as err:
+        raise ApiError(str(err)) from err
 
 
 def _zeitraum(eintrag: object, feld: str) -> Zeitraum:
@@ -187,17 +190,20 @@ def _zeitraum(eintrag: object, feld: str) -> Zeitraum:
     if not isinstance(kennung, str) or not kennung.strip():
         kennung = f"{typ}-{start.isoformat()}"
     hinweis = eintrag.get("hinweis")
-    return Zeitraum(
-        id=kennung.strip(),
-        name=name.strip(),
-        typ=typ.strip(),
-        start=start,
-        ende=ende,
-        frei_von=frei_von,
-        frei_bis=frei_bis,
-        bestaetigt=eintrag.get("bestaetigt") is not False,
-        hinweis=hinweis if isinstance(hinweis, str) and hinweis else None,
-    )
+    try:
+        return Zeitraum(
+            id=kennung.strip(),
+            name=name.strip(),
+            typ=typ.strip(),
+            start=start,
+            ende=ende,
+            frei_von=frei_von,
+            frei_bis=frei_bis,
+            bestaetigt=eintrag.get("bestaetigt") is not False,
+            hinweis=hinweis if isinstance(hinweis, str) and hinweis else None,
+        )
+    except ValueError as err:
+        raise ApiError(str(err)) from err
 
 
 def _feiertag(eintrag: object) -> Feiertag:

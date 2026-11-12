@@ -19,7 +19,10 @@ from homeassistant.helpers.event import (
     async_track_point_in_utc_time,
     async_track_time_change,
 )
-from homeassistant.helpers.update_coordinator import DataUpdateCoordinator
+from homeassistant.helpers.update_coordinator import (
+    DataUpdateCoordinator,
+    UpdateFailed,
+)
 from homeassistant.util import dt as dt_util
 
 from .api import ApiError, FerienClient, NotModified, RateLimited
@@ -96,6 +99,7 @@ class FerienCoordinator(DataUpdateCoordinator[Lage]):
         self._geloggt: set[str] = set()
         self._unsub_mitternacht: CALLBACK_TYPE | None = None
         self._unsub_abruf: CALLBACK_TYPE | None = None
+        self._unsub_retry: CALLBACK_TYPE | None = None
         self._geladen = False
 
     @property
@@ -155,13 +159,17 @@ class FerienCoordinator(DataUpdateCoordinator[Lage]):
         )
 
     async def async_aktualisieren(self) -> bool:
-        """Sofort abrufen. `False`, wenn der Abruf scheitert und der Cache bleibt."""
+        """Sofort abrufen. `False`, wenn der Abruf scheitert."""
+        await self._abruf_erzwingen()
+        return self._versuch_ok
+
+    async def _abruf_erzwingen(self) -> None:
+        """Netz holen, auch wenn der Cache jünger als 24 Stunden ist."""
         self._erzwingen = True
         try:
-            await self.async_request_refresh()
+            await self.async_refresh()
         finally:
             self._erzwingen = False
-        return self._versuch_ok
 
     async def async_tage_setzen(self, tage: tuple[EigenerTag, ...]) -> None:
         """Eigene Tage ersetzen und die Entitäten neu rechnen."""
@@ -174,8 +182,8 @@ class FerienCoordinator(DataUpdateCoordinator[Lage]):
         """Cache nutzen und nur bei Bedarf das Netz fragen."""
         if not self._geladen:
             await self._laden()
-        self._versuch_ok = True
         if self._soll_abrufen():
+            self._versuch_ok = True
             await self._abrufen()
         if self._termine is None:
             raise ConfigEntryNotReady(
@@ -183,6 +191,8 @@ class FerienCoordinator(DataUpdateCoordinator[Lage]):
                 retry_after=self._wartezeit(),
             )
         self._reparaturen()
+        if not self._versuch_ok:
+            raise UpdateFailed(self._letzter_fehler or "Abruf fehlgeschlagen")
         return self._lage()
 
     async def _laden(self) -> None:
@@ -230,6 +240,8 @@ class FerienCoordinator(DataUpdateCoordinator[Lage]):
             )
         except ApiError as err:
             self._fehlschlag(str(err))
+        except ValueError as err:
+            self._fehlschlag(str(err))
         else:
             if termine.land_code != self.land_code:
                 self._fehlschlag(
@@ -260,6 +272,7 @@ class FerienCoordinator(DataUpdateCoordinator[Lage]):
         self._letzter_erfolg = jetzt
         self._letzter_fehler = None
         self._nicht_vor = None
+        self._retry_abbrechen()
         self._geloggt.clear()
         self._versuch_ok = True
 
@@ -268,7 +281,7 @@ class FerienCoordinator(DataUpdateCoordinator[Lage]):
         self._letzter_fehler = text
         if retry_after is not None:
             self._nicht_vor = self._jetzt() + timedelta(seconds=retry_after)
-        self._log_einmal(text, "Abruf für %s fehlgeschlagen: %s", self.land_code, text)
+            self._retry_planen()
 
     def _soll_abrufen(self) -> bool:
         if self._erzwingen:
@@ -356,16 +369,41 @@ class FerienCoordinator(DataUpdateCoordinator[Lage]):
 
     @callback
     def _zeit_abbrechen(self) -> None:
+        self._retry_abbrechen()
         for unsub in (self._unsub_mitternacht, self._unsub_abruf):
             if unsub is not None:
                 unsub()
         self._unsub_mitternacht = None
         self._unsub_abruf = None
 
+    def _retry_planen(self) -> None:
+        """Einen Versuch auf den Ablauf von Retry-After legen."""
+        self._retry_abbrechen()
+        if self._nicht_vor is None:
+            return
+        self._unsub_retry = async_track_point_in_utc_time(
+            self.hass,
+            self._nach_wartezeit,
+            self._nicht_vor,
+        )
+
+    def _retry_abbrechen(self) -> None:
+        if self._unsub_retry is not None:
+            self._unsub_retry()
+            self._unsub_retry = None
+
+    async def _nach_wartezeit(self, _jetzt: datetime) -> None:
+        self._unsub_retry = None
+        if self._nicht_vor is not None and self._jetzt() < self._nicht_vor:
+            self._retry_planen()
+            return
+        await self._abruf_erzwingen()
+
     async def _um_mitternacht(self, _jetzt: datetime) -> None:
         if self._termine is not None:
-            self.async_set_updated_data(self._lage())
             self._reparaturen()
+            if self._versuch_ok:
+                self.async_set_updated_data(self._lage())
         self._unsub_mitternacht = async_track_point_in_utc_time(
             self.hass,
             self._um_mitternacht,
@@ -373,9 +411,10 @@ class FerienCoordinator(DataUpdateCoordinator[Lage]):
         )
 
     async def _geplanter_abruf(self, _jetzt: datetime) -> None:
+        """Täglicher Lauf. Die 24-Stunden-Grenze gilt nur für den Start."""
         if self._nicht_vor is not None and self._jetzt() < self._nicht_vor:
             return
-        await self.async_request_refresh()
+        await self._abruf_erzwingen()
 
     def _wartezeit(self) -> float | None:
         if self._nicht_vor is None:

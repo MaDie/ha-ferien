@@ -21,7 +21,7 @@ Reihenfolge ist verbindlich. Details: `docs/plan.md`, Regeln: `AGENTS.md`.
 - [x] `sensor`: `naechste_ferien`, `tage_bis_ferien`, Diagnose-Sensoren
 - [x] `calendar`
 - [x] Übersetzungen de/en, `hacs.json`, `brand/icon.png`
-- [x] Pflichttests grün, Quality Scale Bronze
+- [x] Pflichttests grün, Quality Scale Silver
 - [ ] Release v0.1.0 (nach Freigabe durch Matthias), Repo dafür öffentlich schalten (nach Freigabe)
 
 ## M2 – Extras (3 Tage)

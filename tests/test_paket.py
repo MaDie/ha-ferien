@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import struct
 from pathlib import Path
 
 WURZEL = Path(__file__).resolve().parents[1]
@@ -33,9 +34,13 @@ def test_uebersetzungen_haben_dieselben_schluessel() -> None:
 
 
 def test_icon_ist_ein_png() -> None:
-    """HACS erwartet ein PNG unter brand/."""
-    inhalt = (WURZEL / "brand" / "icon.png").read_bytes()
-    assert inhalt.startswith(b"\x89PNG\r\n\x1a\n")
+    """HACS liest brand/ im Repo, Home Assistant das Icon in der Integration."""
+    wurzel = (WURZEL / "brand" / "icon.png").read_bytes()
+    integration = (INTEGRATION / "brand" / "icon.png").read_bytes()
+    assert wurzel == integration
+    assert wurzel.startswith(b"\x89PNG\r\n\x1a\n")
+    breite, hoehe = struct.unpack(">II", wurzel[16:24])
+    assert (breite, hoehe) == (256, 256)
 
 
 def test_version_kommt_aus_dem_manifest() -> None:

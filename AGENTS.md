@@ -114,12 +114,13 @@ Eigene Tage liegen im HA-`Store` (`.storage/ferien.<entry_id>`), **nie** in Date
 
 ## Daten, Update, Cache
 
-- Abruf: `GET /api/v1/laender/{code}/termine` einmal täglich, Zeitpunkt pro Installation zufällig zwischen 03:00 und 05:00 Ortszeit (`async_track_time_change` mit zufälliger Minute, beim Setup festgelegt). `If-None-Match` mit gespeichertem ETag; `304` = nur Zeitstempel aktualisieren.
-- Beim Start: zuerst Cache laden. Netzabruf nur, wenn der Cache fehlt oder älter als 24 h ist.
+- Abruf: `GET /api/v1/laender/{code}/termine` einmal täglich, Zeitpunkt pro Installation zufällig zwischen 03:00 und 05:00 Ortszeit (`async_track_time_change` mit zufälliger Minute, beim Setup festgelegt). Dieser Lauf holt immer, auch wenn der Cache jünger als 24 h ist. `If-None-Match` mit gespeichertem ETag; `304` = nur Zeitstempel aktualisieren.
+- Beim Start: zuerst Cache laden. Netzabruf nur, wenn der Cache fehlt oder älter als 24 h ist. Die 24 h gelten nur für den Start, nicht für den täglichen Lauf.
 - **Cache**: gesamte Antwort (mindestens 12 Monate in die Zukunft) im HA-`Store` speichern, versioniert (`STORAGE_VERSION`), mit `etag`, `syncedAt`, `abgerufen_am`.
 - **Mitternacht**: um 00:00:00 Europe/Berlin alle Zustände lokal neu berechnen (`async_track_time_change`), ohne Netz. Kein Neustart nötig.
-- **Ausfall**: API-Fehler (Timeout, 5xx, 429, ungültiges JSON) → alten Cache weiterverwenden, Fehler loggen (einmal, nicht bei jedem Versuch), `Retry-After` beachten.
-  - Für ein Datum ohne Daten im Cache: Entität `unavailable` bzw. State `unknown`. **Niemals „keine Ferien“/`off` als Ersatz.**
+- **Ausfall**: API-Fehler (Timeout, 5xx, 429, ungültiges JSON, unbrauchbares Intervall) lassen den gespeicherten Cache liegen. Der Update wirft `UpdateFailed`, die Entitäten werden `unavailable`. **Niemals „keine Ferien“/`off` als Ersatz.** Der Coordinator loggt den Ausfall einmal und die Rückkehr einmal; die Integration loggt denselben Übergang nicht noch einmal. `Retry-After` sperrt bis zum Ablauf, danach folgt ein neuer Versuch, ohne auf das nächste Morgenfenster zu warten.
+  - Neustart mit Cache jünger als 24 h: kein Netz, Zustände aus dem Cache.
+  - Für ein Datum ohne Daten im Cache: Entität `unavailable` bzw. State `unknown`.
   - Erster Start ohne Cache und ohne Netz: `ConfigEntryNotReady`.
 - **Repairs**: Issue, wenn 14 Tage kein erfolgreicher Abruf, oder die Daten in weniger als 60 Tagen enden.
 - `User-Agent`: `ha-ferien/<version> (+https://github.com/MaDie/ha-ferien)`.
@@ -184,7 +185,7 @@ Erwartetes Format von `/termine` (Fixture-Vorlage):
 - Entitäten erben von `CoordinatorEntity`; keine eigenen Polls pro Entität.
 - Logging: `_LOGGER = logging.getLogger(__name__)`, keine Daten-Dumps auf `info`.
 - Alle Nutzertexte in `strings.json`/`translations/` (de + en). Keine hartcodierten Strings in Python.
-- Quality Scale: **Bronze** für v0.1, **Gold** als Ziel (Diagnostics, Repairs, Reconfigure, Übersetzungen, Icons, Entity-Kategorien). Status in `quality_scale.yaml` pflegen (`done`/`todo`/`exempt` mit Begründung). Platinum nur, wenn strict typing und injizierte Session erfüllt sind.
+- Quality Scale: **Silver** für v0.1, **Gold** als Ziel (Diagnostics, Repairs, Reconfigure, Übersetzungen, Icons, Entity-Kategorien). Status in `quality_scale.yaml` pflegen (`done`/`todo`/`exempt` mit Begründung). Platinum nur, wenn strict typing und injizierte Session erfüllt sind.
 
 ## Tests
 

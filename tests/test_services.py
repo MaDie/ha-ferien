@@ -136,9 +136,8 @@ async def test_ungueltige_actions(hass, aioclient_mock) -> None:
 
 
 async def test_aktualisieren_meldet_den_fehler(hass, aioclient_mock) -> None:
-    """Die Action wirft, die Entität behält den alten Wert."""
+    """Die Action wirft, die Entität wird unavailable und nicht aus."""
     eintrag = await richte_ein(hass, aioclient_mock)
-    vorher = hass.states.get("sensor.ferien_by_tage_bis_ferien").state
     aioclient_mock.clear_requests()
     mock_termine(aioclient_mock, exc=TimeoutError())
     with pytest.raises(HomeAssistantError):
@@ -148,4 +147,4 @@ async def test_aktualisieren_meldet_den_fehler(hass, aioclient_mock) -> None:
             {"config_entry_id": eintrag.entry_id},
             blocking=True,
         )
-    assert hass.states.get("sensor.ferien_by_tage_bis_ferien").state == vorher
+    assert hass.states.get("sensor.ferien_by_tage_bis_ferien").state == "unavailable"

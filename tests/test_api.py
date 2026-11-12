@@ -56,7 +56,7 @@ def test_unbekannte_felder_und_fehlende_id() -> None:
 
 @pytest.mark.parametrize(
     "aenderung",
-    ["land", "von", "liste", "datum", "feiertag"],
+    ["land", "von", "liste", "datum", "feiertag", "intervall", "spanne"],
 )
 def test_kaputtes_payload_wird_abgelehnt(aenderung: str) -> None:
     """Pflichtfelder fehlen nicht stillschweigend."""
@@ -69,6 +69,12 @@ def test_kaputtes_payload_wird_abgelehnt(aenderung: str) -> None:
         payload["feiertage"] = {}
     elif aenderung == "datum":
         payload["ferien"][0]["start"] = None
+    elif aenderung == "intervall":
+        payload["ferien"][0]["start"] = "2026-11-06"
+        payload["ferien"][0]["ende"] = "2026-11-02"
+    elif aenderung == "spanne":
+        payload["von"] = "2028-01-01"
+        payload["bis"] = "2026-01-01"
     else:
         payload["feiertage"][0]["name"] = ""
     with pytest.raises(ApiError):

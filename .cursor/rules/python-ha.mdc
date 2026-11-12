@@ -10,7 +10,7 @@ alwaysApply: false
 - Runtime-Daten in `entry.runtime_data`, nicht in `hass.data`. Entitäten erben von `CoordinatorEntity`.
 - Jede Entität: `has_entity_name = True`, `translation_key`, `unique_id = f"{entry.entry_id}_{key}"`, entity_id sprachunabhängig `ferien_<land>_<key>`.
 - Datumsberechnung immer in Europe/Berlin über `homeassistant.util.dt`. API-`ende` ist inklusiv, Kalender-`end` exklusiv.
-- Fehlen Daten für ein Datum: `unavailable`/`unknown`. Nie `off` oder „keine Ferien“ als Ersatz.
+- Fehlen Daten für ein Datum: `unavailable`/`unknown`. Ein fehlgeschlagener Abruf wirft `UpdateFailed`, die Entitäten werden `unavailable`. Nie `off` oder „keine Ferien“ als Ersatz. Der Cache bleibt für den nächsten Start.
 - Eigene Tage im HA-`Store`, nie in Dateien im Integrationsordner. Keine YAML-Konfiguration.
 - Keine neuen Abhängigkeiten in `manifest.json` (`requirements: []`).
 - Nutzertexte nur in `strings.json` + `translations/de.json` + `translations/en.json`. Bei neuen Keys alle drei pflegen.

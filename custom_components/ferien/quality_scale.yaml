@@ -32,9 +32,19 @@ rules:
   config-entry-unloading: done
   docs-configuration-parameters: done
   docs-installation-parameters: done
-  entity-unavailable: done
+  entity-unavailable:
+    status: done
+    comment: >
+      Ein fehlgeschlagener Abruf wirft UpdateFailed. Die Entitäten werden
+      unavailable, nicht off. Der Cache bleibt für den nächsten Start, wenn
+      er jünger als 24 Stunden ist. Ein Datum außerhalb der Abdeckung ist
+      unavailable, ein fehlender Einzelwert unknown.
   integration-owner: done
-  log-when-unavailable: done
+  log-when-unavailable:
+    status: done
+    comment: >
+      Der DataUpdateCoordinator schreibt den Ausfall einmal und die Rückkehr
+      einmal. Die Integration loggt denselben Übergang nicht noch einmal.
   parallel-updates: done
   reauthentication-flow:
     status: exempt
