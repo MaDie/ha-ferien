@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import inspect
 from datetime import date, datetime, timedelta
 
 from homeassistant.core import HomeAssistant
@@ -15,6 +16,9 @@ from .const import (
     REPAIR_OHNE_ABRUF_TAGE,
 )
 from .logic import BERLIN
+
+# 2026.11 verknüpft das Issue mit dem Eintrag. 2026.10 kennt das Argument nicht.
+_MIT_EINTRAG = "config_entry_id" in inspect.signature(ir.async_create_issue).parameters
 
 
 def async_sync_issues(
@@ -66,15 +70,12 @@ def async_sync_abruf(
     if tage < REPAIR_OHNE_ABRUF_TAGE:
         ir.async_delete_issue(hass, DOMAIN, issue_id)
         return
-    ir.async_create_issue(
+    _issue(
         hass,
-        DOMAIN,
         issue_id,
-        is_fixable=False,
-        severity=ir.IssueSeverity.WARNING,
+        entry_id=entry_id,
         translation_key=ISSUE_ABRUF_VERALTET,
         translation_placeholders={"land": land_name, "tage": str(tage)},
-        config_entry_id=entry_id,
     )
 
 
@@ -91,15 +92,44 @@ def async_sync_horizont(
     if daten_bis >= heute + timedelta(days=REPAIR_DATEN_ENDE_TAGE):
         ir.async_delete_issue(hass, DOMAIN, issue_id)
         return
+    _issue(
+        hass,
+        issue_id,
+        entry_id=entry_id,
+        translation_key=ISSUE_DATEN_ENDEN,
+        translation_placeholders={"land": land_name, "bis": daten_bis.isoformat()},
+    )
+
+
+def _issue(
+    hass: HomeAssistant,
+    issue_id: str,
+    *,
+    entry_id: str,
+    translation_key: str,
+    translation_placeholders: dict[str, str],
+) -> None:
+    """Issue anlegen. Der Eintrag wird nur übergeben, wenn die HA-Version das kann."""
+    if _MIT_EINTRAG:
+        ir.async_create_issue(
+            hass,
+            DOMAIN,
+            issue_id,
+            is_fixable=False,
+            severity=ir.IssueSeverity.WARNING,
+            translation_key=translation_key,
+            translation_placeholders=translation_placeholders,
+            config_entry_id=entry_id,
+        )
+        return
     ir.async_create_issue(
         hass,
         DOMAIN,
         issue_id,
         is_fixable=False,
         severity=ir.IssueSeverity.WARNING,
-        translation_key=ISSUE_DATEN_ENDEN,
-        translation_placeholders={"land": land_name, "bis": daten_bis.isoformat()},
-        config_entry_id=entry_id,
+        translation_key=translation_key,
+        translation_placeholders=translation_placeholders,
     )
 
 
