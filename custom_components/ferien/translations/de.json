@@ -1,0 +1,263 @@
+{
+  "config": {
+    "abort": {
+      "already_configured": "Dieses Bundesland ist bereits eingerichtet"
+    },
+    "error": {
+      "cannot_connect": "schulferienrechner.de ist nicht erreichbar",
+      "datum_ungueltig": "Das Datum ist ungültig",
+      "name_ungueltig": "Der Name fehlt oder ist länger als 80 Zeichen",
+      "tag_unbekannt": "Kein eigener Tag beginnt an diesem Datum",
+      "unknown": "schulferienrechner.de hat unerwartet geantwortet",
+      "zeitraum_ungueltig": "Das Ende liegt vor dem Start"
+    },
+    "step": {
+      "reconfigure": {
+        "data": {
+          "land": "Bundesland"
+        },
+        "description": "Die Entitäten behalten ihre IDs. Die Entity-IDs enthalten weiter `{kuerzel}`, bis du sie umbenennst. Aktuell: {land}.",
+        "title": "Bundesland wechseln"
+      },
+      "user": {
+        "data": {
+          "land": "Bundesland"
+        },
+        "description": "Ein Eintrag pro Bundesland. Schulferien, schulfreie Tage und Feiertage.",
+        "title": "Bundesland"
+      }
+    }
+  },
+  "entity": {
+    "binary_sensor": {
+      "feiertag_heute": {
+        "name": "Feiertag heute",
+        "state_attributes": {
+          "name": { "name": "Name" }
+        }
+      },
+      "feiertag_morgen": {
+        "name": "Feiertag morgen",
+        "state_attributes": {
+          "name": { "name": "Name" }
+        }
+      },
+      "ferien_heute": {
+        "name": "Ferien heute",
+        "state_attributes": {
+          "ende": { "name": "Ende" },
+          "name": { "name": "Name" },
+          "start": { "name": "Start" }
+        }
+      },
+      "ferien_morgen": {
+        "name": "Ferien morgen",
+        "state_attributes": {
+          "ende": { "name": "Ende" },
+          "name": { "name": "Name" },
+          "start": { "name": "Start" }
+        }
+      },
+      "schulfrei_heute": {
+        "name": "Schulfrei heute",
+        "state_attributes": {
+          "grund": {
+            "name": "Grund",
+            "state": {
+              "eigener_tag": "Eigener Tag",
+              "feiertag": "Feiertag",
+              "ferien": "Ferien",
+              "schulfrei": "Schulfreier Tag",
+              "wochenende": "Wochenende"
+            }
+          },
+          "name": { "name": "Name" }
+        }
+      },
+      "schulfrei_morgen": {
+        "name": "Schulfrei morgen",
+        "state_attributes": {
+          "grund": {
+            "name": "Grund",
+            "state": {
+              "eigener_tag": "Eigener Tag",
+              "feiertag": "Feiertag",
+              "ferien": "Ferien",
+              "schulfrei": "Schulfreier Tag",
+              "wochenende": "Wochenende"
+            }
+          },
+          "name": { "name": "Name" }
+        }
+      }
+    },
+    "calendar": {
+      "kalender": { "name": "Kalender" }
+    },
+    "sensor": {
+      "daten_bis": { "name": "Daten bis" },
+      "datenstand": { "name": "Datenstand" },
+      "erster_schultag": { "name": "Erster Schultag" },
+      "ferientage_verbleibend": { "name": "Ferientage verbleibend" },
+      "letzte_aktualisierung": { "name": "Letzte Aktualisierung" },
+      "letzter_schultag": { "name": "Letzter Schultag" },
+      "naechste_ferien": {
+        "name": "Nächste Ferien",
+        "state_attributes": {
+          "ende": { "name": "Ende" },
+          "frei_bis": { "name": "Frei bis" },
+          "frei_von": { "name": "Frei von" },
+          "name": { "name": "Name" },
+          "start": { "name": "Start" }
+        }
+      },
+      "naechster_feiertag": { "name": "Nächster Feiertag" },
+      "naechster_schultag": { "name": "Nächster Schultag" },
+      "schultage_bis_ferien": { "name": "Schultage bis Ferien" },
+      "tage_bis_ferien": { "name": "Tage bis Ferien" }
+    }
+  },
+  "exceptions": {
+    "abruf_fehlgeschlagen": {
+      "message": "Abruf für {anzahl} Einträge fehlgeschlagen. Die vorhandenen Daten bleiben."
+    },
+    "datum_ohne_daten": {
+      "message": "Keine Daten für {datum}. Das ist kein Ergebnis „keine Ferien“."
+    },
+    "datum_ungueltig": { "message": "Das Datum ist ungültig." },
+    "eintrag_fehlt": { "message": "Der Eintrag wurde nicht gefunden." },
+    "eintrag_nicht_bereit": { "message": "Der Eintrag ist nicht geladen." },
+    "name_ungueltig": { "message": "Der Name fehlt oder ist länger als 80 Zeichen." },
+    "tag_unbekannt": { "message": "Kein eigener Tag beginnt am {start}." },
+    "zeitraum_ohne_daten": {
+      "message": "Der Zeitraum {von} bis {bis} liegt außerhalb der gespeicherten Daten."
+    },
+    "zeitraum_ungueltig": { "message": "Das Ende liegt vor dem Start." }
+  },
+  "issues": {
+    "abruf_veraltet": {
+      "description": "Der letzte erfolgreiche Abruf für {land} war vor {tage} Tagen. Es gelten weiter die gespeicherten Daten.",
+      "title": "Feriendaten für {land} seit {tage} Tagen nicht aktualisiert"
+    },
+    "daten_enden": {
+      "description": "Die gespeicherten Daten für {land} enden am {bis}. Vorher erneut abrufen.",
+      "title": "Feriendaten für {land} enden am {bis}"
+    }
+  },
+  "options": {
+    "abort": {
+      "keine_eigenen_tage": "Es sind keine eigenen Tage gespeichert",
+      "tag_gespeichert": "Die eigenen Tage wurden aktualisiert"
+    },
+    "error": {
+      "datum_ungueltig": "[%key:component::ferien::config::error::datum_ungueltig%]",
+      "name_ungueltig": "[%key:component::ferien::config::error::name_ungueltig%]",
+      "tag_unbekannt": "[%key:component::ferien::config::error::tag_unbekannt%]",
+      "zeitraum_ungueltig": "[%key:component::ferien::config::error::zeitraum_ungueltig%]"
+    },
+    "step": {
+      "einstellungen": {
+        "data": {
+          "feiertage_im_kalender": "Feiertage im Kalender",
+          "regionale_feiertage": "Regionale Feiertage"
+        },
+        "data_description": {
+          "feiertage_im_kalender": "Aus: der Kalender zeigt nur Ferien, schulfreie Tage und eigene Tage.",
+          "regionale_feiertage": "Feiertage, die nur in Teilen des Landes gelten, zum Beispiel das Augsburger Friedensfest."
+        },
+        "title": "Einstellungen"
+      },
+      "init": {
+        "menu_options": {
+          "einstellungen": "Einstellungen",
+          "tag_entfernen": "Eigenen Tag entfernen",
+          "tag_hinzufuegen": "Eigenen Tag hinzufügen"
+        },
+        "title": "Optionen"
+      },
+      "tag_entfernen": {
+        "data": { "start": "Start" },
+        "title": "Eigenen Tag entfernen"
+      },
+      "tag_hinzufuegen": {
+        "data": {
+          "ende": "Ende",
+          "name": "Name",
+          "start": "Start"
+        },
+        "data_description": {
+          "ende": "Optional. Ohne Ende ist es ein einzelner Tag. Das Ende ist inklusive."
+        },
+        "title": "Eigenen Tag hinzufügen"
+      }
+    }
+  },
+  "services": {
+    "aktualisieren": {
+      "description": "Sofort abrufen. Schlägt der Abruf fehl, bleiben die gespeicherten Daten.",
+      "fields": {
+        "config_entry_id": {
+          "description": "Ein Eintrag. Leer aktualisiert alle geladenen Einträge.",
+          "name": "Bundesland"
+        }
+      },
+      "name": "Aktualisieren"
+    },
+    "schultag_pruefen": {
+      "description": "Liefert, ob ein Datum schulfrei ist, mit Grund und Name.",
+      "fields": {
+        "config_entry_id": { "name": "Bundesland" },
+        "datum": { "name": "Datum" }
+      },
+      "name": "Schultag prüfen"
+    },
+    "tag_entfernen": {
+      "description": "Entfernt den eigenen Tag, der an diesem Datum beginnt.",
+      "fields": {
+        "config_entry_id": { "name": "Bundesland" },
+        "start": { "name": "Start" }
+      },
+      "name": "Eigenen Tag entfernen"
+    },
+    "tag_hinzufuegen": {
+      "description": "Speichert einen eigenen schulfreien Tag oder Zeitraum. Dasselbe Startdatum ersetzt den vorhandenen Eintrag.",
+      "fields": {
+        "config_entry_id": { "name": "Bundesland" },
+        "ende": {
+          "description": "Inklusiv. Leer bedeutet ein einzelner Tag.",
+          "name": "Ende"
+        },
+        "name": { "name": "Name" },
+        "start": { "name": "Start" }
+      },
+      "name": "Eigenen Tag hinzufügen"
+    },
+    "termine_abrufen": {
+      "description": "Listet Ferien, schulfreie Tage, Feiertage und eigene Tage in einem Zeitraum.",
+      "fields": {
+        "bis": { "name": "Bis" },
+        "config_entry_id": { "name": "Bundesland" },
+        "typen": {
+          "name": "Typen",
+          "selector": {
+            "select": {
+              "options": {
+                "eigener_tag": "Eigener Tag",
+                "feiertag": "Feiertag",
+                "herbstferien": "Herbstferien",
+                "osterferien": "Osterferien",
+                "pfingstferien": "Pfingstferien",
+                "schulfrei": "Schulfreier Tag",
+                "sommerferien": "Sommerferien",
+                "weihnachtsferien": "Weihnachtsferien",
+                "winterferien": "Winterferien"
+              }
+            }
+          }
+        },
+        "von": { "name": "Von" }
+      },
+      "name": "Termine abrufen"
+    }
+  }
+}

@@ -1,0 +1,7 @@
+# Test- und Werkzeugabhängigkeiten. Laufzeit der Integration bleibt ohne PyPI-Pakete.
+# 2026.11 nutzt pytest-homeassistant. 2026.10 bleibt beim letzten
+# pytest-homeassistant-custom-component und wird nur in der CI-Matrix installiert.
+pytest-homeassistant==2026.11.1
+pytest-cov==7.1.0
+ruff==0.17.4
+mypy==2.4.1

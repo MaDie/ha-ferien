@@ -1,0 +1,36 @@
+blueprint:
+  name: Rollläden am Schultag
+  description: >
+    Öffnet die Rollläden zur gewählten Uhrzeit nur, wenn heute Schule ist.
+  domain: automation
+  author: Ferien
+  input:
+    uhrzeit:
+      name: Uhrzeit
+      default: "06:30:00"
+      selector:
+        time:
+    schulfrei_heute:
+      name: Schulfrei heute
+      selector:
+        entity:
+          filter:
+            - integration: ferien
+              domain: binary_sensor
+    rollladen:
+      name: Rollladen
+      selector:
+        entity:
+          filter:
+            - domain: cover
+triggers:
+  - trigger: time
+    at: !input uhrzeit
+conditions:
+  - condition: state
+    entity_id: !input schulfrei_heute
+    state: "off"
+actions:
+  - action: cover.open_cover
+    target:
+      entity_id: !input rollladen

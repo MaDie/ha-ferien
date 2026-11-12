@@ -1,0 +1,28 @@
+# serializer version: 1
+# name: test_diagnostics_snapshot
+  dict({
+    'abgerufen_am': '2026-11-11T12:00:00+01:00',
+    'abruf': dict({
+      'minute': 17,
+      'stunde': 3,
+    }),
+    'anzahl': dict({
+      'eigene_tage': 0,
+      'feiertage': 34,
+      'ferien': 13,
+      'schulfrei': 2,
+    }),
+    'bereit': True,
+    'bis': '2028-12-31',
+    'datenstand': '2026-11-11T03:00:00+01:00',
+    'eigene_tage': list([
+    ]),
+    'etag': 'by-1',
+    'land': 'BY',
+    'letzter_erfolg': '2026-11-11T12:00:00+01:00',
+    'letzter_fehler': None,
+    'optionen': dict({
+    }),
+    'von': '2026-08-01',
+  })
+# ---

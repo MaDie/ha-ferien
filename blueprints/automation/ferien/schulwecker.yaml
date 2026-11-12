@@ -1,0 +1,31 @@
+blueprint:
+  name: Schulwecker
+  description: >
+    Benachrichtigt zur gewählten Uhrzeit, wenn heute Schule ist.
+    Die Zeitzone von Home Assistant sollte Europe/Berlin sein.
+  domain: automation
+  author: Ferien
+  input:
+    uhrzeit:
+      name: Uhrzeit
+      selector:
+        time:
+    schulfrei_heute:
+      name: Schulfrei heute
+      selector:
+        entity:
+          filter:
+            - integration: ferien
+              domain: binary_sensor
+    aktionen:
+      name: Aktionen
+      selector:
+        action:
+triggers:
+  - trigger: time
+    at: !input uhrzeit
+conditions:
+  - condition: state
+    entity_id: !input schulfrei_heute
+    state: "off"
+actions: !input aktionen

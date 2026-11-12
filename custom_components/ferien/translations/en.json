@@ -1,0 +1,263 @@
+{
+  "config": {
+    "abort": {
+      "already_configured": "This state is already set up"
+    },
+    "error": {
+      "cannot_connect": "schulferienrechner.de is not reachable",
+      "datum_ungueltig": "The date is invalid",
+      "name_ungueltig": "Name is missing or longer than 80 characters",
+      "tag_unbekannt": "No custom day starts on this date",
+      "unknown": "schulferienrechner.de returned an unexpected response",
+      "zeitraum_ungueltig": "The end date is before the start date"
+    },
+    "step": {
+      "reconfigure": {
+        "data": {
+          "land": "State"
+        },
+        "description": "The entities keep their IDs. The entity IDs still contain `{kuerzel}` until you rename them. Currently: {land}.",
+        "title": "Change state"
+      },
+      "user": {
+        "data": {
+          "land": "State"
+        },
+        "description": "One entry per state. School holidays, school-free days and public holidays.",
+        "title": "State"
+      }
+    }
+  },
+  "entity": {
+    "binary_sensor": {
+      "feiertag_heute": {
+        "name": "Public holiday today",
+        "state_attributes": {
+          "name": { "name": "Name" }
+        }
+      },
+      "feiertag_morgen": {
+        "name": "Public holiday tomorrow",
+        "state_attributes": {
+          "name": { "name": "Name" }
+        }
+      },
+      "ferien_heute": {
+        "name": "Holidays today",
+        "state_attributes": {
+          "ende": { "name": "End" },
+          "name": { "name": "Name" },
+          "start": { "name": "Start" }
+        }
+      },
+      "ferien_morgen": {
+        "name": "Holidays tomorrow",
+        "state_attributes": {
+          "ende": { "name": "End" },
+          "name": { "name": "Name" },
+          "start": { "name": "Start" }
+        }
+      },
+      "schulfrei_heute": {
+        "name": "School-free today",
+        "state_attributes": {
+          "grund": {
+            "name": "Reason",
+            "state": {
+              "eigener_tag": "Custom day",
+              "feiertag": "Public holiday",
+              "ferien": "Holidays",
+              "schulfrei": "School-free day",
+              "wochenende": "Weekend"
+            }
+          },
+          "name": { "name": "Name" }
+        }
+      },
+      "schulfrei_morgen": {
+        "name": "School-free tomorrow",
+        "state_attributes": {
+          "grund": {
+            "name": "Reason",
+            "state": {
+              "eigener_tag": "Custom day",
+              "feiertag": "Public holiday",
+              "ferien": "Holidays",
+              "schulfrei": "School-free day",
+              "wochenende": "Weekend"
+            }
+          },
+          "name": { "name": "Name" }
+        }
+      }
+    },
+    "calendar": {
+      "kalender": { "name": "Calendar" }
+    },
+    "sensor": {
+      "daten_bis": { "name": "Data until" },
+      "datenstand": { "name": "Data timestamp" },
+      "erster_schultag": { "name": "First school day" },
+      "ferientage_verbleibend": { "name": "Holiday days remaining" },
+      "letzte_aktualisierung": { "name": "Last update" },
+      "letzter_schultag": { "name": "Last school day" },
+      "naechste_ferien": {
+        "name": "Next holidays",
+        "state_attributes": {
+          "ende": { "name": "End" },
+          "frei_bis": { "name": "Off until" },
+          "frei_von": { "name": "Off from" },
+          "name": { "name": "Name" },
+          "start": { "name": "Start" }
+        }
+      },
+      "naechster_feiertag": { "name": "Next public holiday" },
+      "naechster_schultag": { "name": "Next school day" },
+      "schultage_bis_ferien": { "name": "School days until holidays" },
+      "tage_bis_ferien": { "name": "Days until holidays" }
+    }
+  },
+  "exceptions": {
+    "abruf_fehlgeschlagen": {
+      "message": "Download failed for {anzahl} entries. Existing data was kept."
+    },
+    "datum_ohne_daten": {
+      "message": "No data for {datum}. The result is not 'no holidays'."
+    },
+    "datum_ungueltig": { "message": "The date is invalid." },
+    "eintrag_fehlt": { "message": "Config entry was not found." },
+    "eintrag_nicht_bereit": { "message": "Config entry is not loaded." },
+    "name_ungueltig": { "message": "Name is missing or longer than 80 characters." },
+    "tag_unbekannt": { "message": "No custom day starts on {start}." },
+    "zeitraum_ohne_daten": {
+      "message": "The range {von} to {bis} is outside the cached data."
+    },
+    "zeitraum_ungueltig": { "message": "The end date is before the start date." }
+  },
+  "issues": {
+    "abruf_veraltet": {
+      "description": "The last successful download for {land} was {tage} days ago. The last cached data is still in use.",
+      "title": "Holiday data for {land} has not been updated for {tage} days"
+    },
+    "daten_enden": {
+      "description": "Cached data for {land} ends on {bis}. Download again before the dates run out.",
+      "title": "Holiday data for {land} ends on {bis}"
+    }
+  },
+  "options": {
+    "abort": {
+      "keine_eigenen_tage": "There are no custom days to remove",
+      "tag_gespeichert": "Custom days were updated"
+    },
+    "error": {
+      "datum_ungueltig": "[%key:component::ferien::config::error::datum_ungueltig%]",
+      "name_ungueltig": "[%key:component::ferien::config::error::name_ungueltig%]",
+      "tag_unbekannt": "[%key:component::ferien::config::error::tag_unbekannt%]",
+      "zeitraum_ungueltig": "[%key:component::ferien::config::error::zeitraum_ungueltig%]"
+    },
+    "step": {
+      "einstellungen": {
+        "data": {
+          "feiertage_im_kalender": "Public holidays in the calendar",
+          "regionale_feiertage": "Regional public holidays"
+        },
+        "data_description": {
+          "feiertage_im_kalender": "When off, the calendar only shows holidays, school-free days and custom days.",
+          "regionale_feiertage": "Includes holidays that apply only in part of the state, for example Augsburger Friedensfest."
+        },
+        "title": "Settings"
+      },
+      "init": {
+        "menu_options": {
+          "einstellungen": "Settings",
+          "tag_entfernen": "Remove custom day",
+          "tag_hinzufuegen": "Add custom day"
+        },
+        "title": "Options"
+      },
+      "tag_entfernen": {
+        "data": { "start": "Start" },
+        "title": "Remove custom day"
+      },
+      "tag_hinzufuegen": {
+        "data": {
+          "ende": "End",
+          "name": "Name",
+          "start": "Start"
+        },
+        "data_description": {
+          "ende": "Optional. Without an end, the day is a single date. The end is inclusive."
+        },
+        "title": "Add custom day"
+      }
+    }
+  },
+  "services": {
+    "aktualisieren": {
+      "description": "Download now. If the download fails, the cached data stays.",
+      "fields": {
+        "config_entry_id": {
+          "description": "One entry. Empty updates every loaded entry.",
+          "name": "State"
+        }
+      },
+      "name": "Update"
+    },
+    "schultag_pruefen": {
+      "description": "Returns whether a date is school-free, with reason and name.",
+      "fields": {
+        "config_entry_id": { "name": "State" },
+        "datum": { "name": "Date" }
+      },
+      "name": "Check school day"
+    },
+    "tag_entfernen": {
+      "description": "Removes the custom day that starts on this date.",
+      "fields": {
+        "config_entry_id": { "name": "State" },
+        "start": { "name": "Start" }
+      },
+      "name": "Remove custom day"
+    },
+    "tag_hinzufuegen": {
+      "description": "Stores a custom school-free day or range. The same start date replaces the existing entry.",
+      "fields": {
+        "config_entry_id": { "name": "State" },
+        "ende": {
+          "description": "Inclusive. Empty means a single day.",
+          "name": "End"
+        },
+        "name": { "name": "Name" },
+        "start": { "name": "Start" }
+      },
+      "name": "Add custom day"
+    },
+    "termine_abrufen": {
+      "description": "Lists holidays, school-free days, public holidays and custom days in a range.",
+      "fields": {
+        "bis": { "name": "Until" },
+        "config_entry_id": { "name": "State" },
+        "typen": {
+          "name": "Types",
+          "selector": {
+            "select": {
+              "options": {
+                "eigener_tag": "Custom day",
+                "feiertag": "Public holiday",
+                "herbstferien": "Autumn holidays",
+                "osterferien": "Easter holidays",
+                "pfingstferien": "Whitsun holidays",
+                "schulfrei": "School-free day",
+                "sommerferien": "Summer holidays",
+                "weihnachtsferien": "Christmas holidays",
+                "winterferien": "Winter holidays"
+              }
+            }
+          }
+        },
+        "von": { "name": "From" }
+      },
+      "name": "Get dates"
+    }
+  }
+}

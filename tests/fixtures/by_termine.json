@@ -1,0 +1,456 @@
+{
+  "land": {
+    "code": "BY",
+    "iso": "DE-BY",
+    "slug": "bayern",
+    "name": "Bayern"
+  },
+  "von": "2026-08-01",
+  "bis": "2028-12-31",
+  "ferien": [
+    {
+      "id": "by-sommerferien-2026-08-03",
+      "name": "Sommerferien",
+      "typ": "sommerferien",
+      "start": "2026-08-03",
+      "ende": "2026-09-14",
+      "frei_von": "2026-08-01",
+      "frei_bis": "2026-09-14",
+      "bestaetigt": true,
+      "hinweis": null
+    },
+    {
+      "id": "by-herbstferien-2026-11-02",
+      "name": "Herbstferien",
+      "typ": "herbstferien",
+      "start": "2026-11-02",
+      "ende": "2026-11-06",
+      "frei_von": "2026-10-31",
+      "frei_bis": "2026-11-08",
+      "bestaetigt": true,
+      "hinweis": null
+    },
+    {
+      "id": "by-weihnachtsferien-2026-12-24",
+      "name": "Weihnachtsferien",
+      "typ": "weihnachtsferien",
+      "start": "2026-12-24",
+      "ende": "2027-01-08",
+      "frei_von": "2026-12-24",
+      "frei_bis": "2027-01-10",
+      "bestaetigt": true,
+      "hinweis": null
+    },
+    {
+      "id": "by-fruehjahrsferien-2027-02-08",
+      "name": "Frühjahrsferien",
+      "typ": "fruehjahrsferien",
+      "start": "2027-02-08",
+      "ende": "2027-02-12",
+      "frei_von": "2027-02-06",
+      "frei_bis": "2027-02-14",
+      "bestaetigt": true,
+      "hinweis": null
+    },
+    {
+      "id": "by-osterferien-2027-03-22",
+      "name": "Osterferien",
+      "typ": "osterferien",
+      "start": "2027-03-22",
+      "ende": "2027-04-02",
+      "frei_von": "2027-03-20",
+      "frei_bis": "2027-04-04",
+      "bestaetigt": true,
+      "hinweis": null
+    },
+    {
+      "id": "by-pfingstferien-2027-05-18",
+      "name": "Pfingstferien",
+      "typ": "pfingstferien",
+      "start": "2027-05-18",
+      "ende": "2027-05-28",
+      "frei_von": "2027-05-15",
+      "frei_bis": "2027-05-30",
+      "bestaetigt": true,
+      "hinweis": null
+    },
+    {
+      "id": "by-sommerferien-2027-08-02",
+      "name": "Sommerferien",
+      "typ": "sommerferien",
+      "start": "2027-08-02",
+      "ende": "2027-09-13",
+      "frei_von": "2027-07-31",
+      "frei_bis": "2027-09-13",
+      "bestaetigt": true,
+      "hinweis": null
+    },
+    {
+      "id": "by-herbstferien-2027-11-02",
+      "name": "Herbstferien",
+      "typ": "herbstferien",
+      "start": "2027-11-02",
+      "ende": "2027-11-05",
+      "frei_von": "2027-10-30",
+      "frei_bis": "2027-11-07",
+      "bestaetigt": true,
+      "hinweis": null
+    },
+    {
+      "id": "by-weihnachtsferien-2027-12-24",
+      "name": "Weihnachtsferien",
+      "typ": "weihnachtsferien",
+      "start": "2027-12-24",
+      "ende": "2028-01-07",
+      "frei_von": "2027-12-24",
+      "frei_bis": "2028-01-09",
+      "bestaetigt": true,
+      "hinweis": null
+    },
+    {
+      "id": "by-fruehjahrsferien-2028-02-28",
+      "name": "Frühjahrsferien",
+      "typ": "fruehjahrsferien",
+      "start": "2028-02-28",
+      "ende": "2028-03-03",
+      "frei_von": "2028-02-26",
+      "frei_bis": "2028-03-05",
+      "bestaetigt": true,
+      "hinweis": null
+    },
+    {
+      "id": "by-osterferien-2028-04-10",
+      "name": "Osterferien",
+      "typ": "osterferien",
+      "start": "2028-04-10",
+      "ende": "2028-04-21",
+      "frei_von": "2028-04-08",
+      "frei_bis": "2028-04-23",
+      "bestaetigt": true,
+      "hinweis": null
+    },
+    {
+      "id": "by-pfingstferien-2028-06-06",
+      "name": "Pfingstferien",
+      "typ": "pfingstferien",
+      "start": "2028-06-06",
+      "ende": "2028-06-16",
+      "frei_von": "2028-06-03",
+      "frei_bis": "2028-06-18",
+      "bestaetigt": true,
+      "hinweis": null
+    },
+    {
+      "id": "by-sommerferien-2028-07-31",
+      "name": "Sommerferien",
+      "typ": "sommerferien",
+      "start": "2028-07-31",
+      "ende": "2028-09-11",
+      "frei_von": "2028-07-29",
+      "frei_bis": "2028-09-11",
+      "bestaetigt": true,
+      "hinweis": null
+    }
+  ],
+  "schulfrei": [
+    {
+      "id": "by-schulfrei-2026-11-18",
+      "name": "Buß- und Bettag",
+      "typ": "schulfrei",
+      "start": "2026-11-18",
+      "ende": "2026-11-18",
+      "frei_von": "2026-11-18",
+      "frei_bis": "2026-11-18",
+      "bestaetigt": true,
+      "hinweis": null
+    },
+    {
+      "id": "by-schulfrei-2027-11-17",
+      "name": "Buß- und Bettag",
+      "typ": "schulfrei",
+      "start": "2027-11-17",
+      "ende": "2027-11-17",
+      "frei_von": "2027-11-17",
+      "frei_bis": "2027-11-17",
+      "bestaetigt": true,
+      "hinweis": null
+    }
+  ],
+  "feiertage": [
+    {
+      "name": "Augsburger Friedensfest",
+      "datum": "2026-08-08",
+      "bundesweit": false,
+      "teilweise": false,
+      "lokal": true,
+      "hinweis": null
+    },
+    {
+      "name": "Mariä Himmelfahrt",
+      "datum": "2026-08-15",
+      "bundesweit": false,
+      "teilweise": true,
+      "lokal": false,
+      "hinweis": null
+    },
+    {
+      "name": "Tag der Deutschen Einheit",
+      "datum": "2026-10-03",
+      "bundesweit": true,
+      "teilweise": false,
+      "lokal": false,
+      "hinweis": null
+    },
+    {
+      "name": "Allerheiligen",
+      "datum": "2026-11-01",
+      "bundesweit": false,
+      "teilweise": false,
+      "lokal": false,
+      "hinweis": null
+    },
+    {
+      "name": "1. Weihnachtstag",
+      "datum": "2026-12-25",
+      "bundesweit": true,
+      "teilweise": false,
+      "lokal": false,
+      "hinweis": null
+    },
+    {
+      "name": "2. Weihnachtstag",
+      "datum": "2026-12-26",
+      "bundesweit": true,
+      "teilweise": false,
+      "lokal": false,
+      "hinweis": null
+    },
+    {
+      "name": "Neujahr",
+      "datum": "2027-01-01",
+      "bundesweit": true,
+      "teilweise": false,
+      "lokal": false,
+      "hinweis": null
+    },
+    {
+      "name": "Heilige Drei Könige",
+      "datum": "2027-01-06",
+      "bundesweit": false,
+      "teilweise": false,
+      "lokal": false,
+      "hinweis": null
+    },
+    {
+      "name": "Karfreitag",
+      "datum": "2027-03-26",
+      "bundesweit": true,
+      "teilweise": false,
+      "lokal": false,
+      "hinweis": null
+    },
+    {
+      "name": "Ostermontag",
+      "datum": "2027-03-29",
+      "bundesweit": true,
+      "teilweise": false,
+      "lokal": false,
+      "hinweis": null
+    },
+    {
+      "name": "Tag der Arbeit",
+      "datum": "2027-05-01",
+      "bundesweit": true,
+      "teilweise": false,
+      "lokal": false,
+      "hinweis": null
+    },
+    {
+      "name": "Christi Himmelfahrt",
+      "datum": "2027-05-06",
+      "bundesweit": true,
+      "teilweise": false,
+      "lokal": false,
+      "hinweis": null
+    },
+    {
+      "name": "Pfingstmontag",
+      "datum": "2027-05-17",
+      "bundesweit": true,
+      "teilweise": false,
+      "lokal": false,
+      "hinweis": null
+    },
+    {
+      "name": "Fronleichnam",
+      "datum": "2027-05-27",
+      "bundesweit": false,
+      "teilweise": false,
+      "lokal": false,
+      "hinweis": null
+    },
+    {
+      "name": "Augsburger Friedensfest",
+      "datum": "2027-08-08",
+      "bundesweit": false,
+      "teilweise": false,
+      "lokal": true,
+      "hinweis": null
+    },
+    {
+      "name": "Mariä Himmelfahrt",
+      "datum": "2027-08-15",
+      "bundesweit": false,
+      "teilweise": true,
+      "lokal": false,
+      "hinweis": null
+    },
+    {
+      "name": "Tag der Deutschen Einheit",
+      "datum": "2027-10-03",
+      "bundesweit": true,
+      "teilweise": false,
+      "lokal": false,
+      "hinweis": null
+    },
+    {
+      "name": "Allerheiligen",
+      "datum": "2027-11-01",
+      "bundesweit": false,
+      "teilweise": false,
+      "lokal": false,
+      "hinweis": null
+    },
+    {
+      "name": "1. Weihnachtstag",
+      "datum": "2027-12-25",
+      "bundesweit": true,
+      "teilweise": false,
+      "lokal": false,
+      "hinweis": null
+    },
+    {
+      "name": "2. Weihnachtstag",
+      "datum": "2027-12-26",
+      "bundesweit": true,
+      "teilweise": false,
+      "lokal": false,
+      "hinweis": null
+    },
+    {
+      "name": "Neujahr",
+      "datum": "2028-01-01",
+      "bundesweit": true,
+      "teilweise": false,
+      "lokal": false,
+      "hinweis": null
+    },
+    {
+      "name": "Heilige Drei Könige",
+      "datum": "2028-01-06",
+      "bundesweit": false,
+      "teilweise": false,
+      "lokal": false,
+      "hinweis": null
+    },
+    {
+      "name": "Karfreitag",
+      "datum": "2028-04-14",
+      "bundesweit": true,
+      "teilweise": false,
+      "lokal": false,
+      "hinweis": null
+    },
+    {
+      "name": "Ostermontag",
+      "datum": "2028-04-17",
+      "bundesweit": true,
+      "teilweise": false,
+      "lokal": false,
+      "hinweis": null
+    },
+    {
+      "name": "Tag der Arbeit",
+      "datum": "2028-05-01",
+      "bundesweit": true,
+      "teilweise": false,
+      "lokal": false,
+      "hinweis": null
+    },
+    {
+      "name": "Christi Himmelfahrt",
+      "datum": "2028-05-25",
+      "bundesweit": true,
+      "teilweise": false,
+      "lokal": false,
+      "hinweis": null
+    },
+    {
+      "name": "Pfingstmontag",
+      "datum": "2028-06-05",
+      "bundesweit": true,
+      "teilweise": false,
+      "lokal": false,
+      "hinweis": null
+    },
+    {
+      "name": "Fronleichnam",
+      "datum": "2028-06-15",
+      "bundesweit": false,
+      "teilweise": false,
+      "lokal": false,
+      "hinweis": null
+    },
+    {
+      "name": "Augsburger Friedensfest",
+      "datum": "2028-08-08",
+      "bundesweit": false,
+      "teilweise": false,
+      "lokal": true,
+      "hinweis": null
+    },
+    {
+      "name": "Mariä Himmelfahrt",
+      "datum": "2028-08-15",
+      "bundesweit": false,
+      "teilweise": true,
+      "lokal": false,
+      "hinweis": null
+    },
+    {
+      "name": "Tag der Deutschen Einheit",
+      "datum": "2028-10-03",
+      "bundesweit": true,
+      "teilweise": false,
+      "lokal": false,
+      "hinweis": null
+    },
+    {
+      "name": "Allerheiligen",
+      "datum": "2028-11-01",
+      "bundesweit": false,
+      "teilweise": false,
+      "lokal": false,
+      "hinweis": null
+    },
+    {
+      "name": "1. Weihnachtstag",
+      "datum": "2028-12-25",
+      "bundesweit": true,
+      "teilweise": false,
+      "lokal": false,
+      "hinweis": null
+    },
+    {
+      "name": "2. Weihnachtstag",
+      "datum": "2028-12-26",
+      "bundesweit": true,
+      "teilweise": false,
+      "lokal": false,
+      "hinweis": null
+    }
+  ],
+  "quelle": "OpenHolidays API, aufbereitet von schulferienrechner.de",
+  "lizenz": "ODbL-1.0",
+  "datenstand": "2026-11-11T03:00:00+01:00"
+}

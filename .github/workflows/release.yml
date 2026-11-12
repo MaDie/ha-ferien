@@ -1,0 +1,65 @@
+name: Release
+
+on:
+  push:
+    tags: ["v*.*.*"]
+
+permissions:
+  contents: write
+
+jobs:
+  pruefen:
+    uses: ./.github/workflows/ci.yml
+
+  veroeffentlichen:
+    needs: pruefen
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7.0.1
+      - uses: actions/setup-python@v7.1.0
+        with:
+          python-version: "3.14"
+      - name: Tag, Manifest und Changelog prüfen
+        id: version
+        run: |
+          python - <<'PY'
+          import json
+          import os
+          import pathlib
+          import re
+
+          tag = os.environ["GITHUB_REF_NAME"]
+          version = tag.removeprefix("v")
+          manifest = json.loads(
+              pathlib.Path("custom_components/ferien/manifest.json").read_text()
+          )
+          if manifest["version"] != version:
+              raise SystemExit(
+                  f"Tag {version} weicht von manifest.json ({manifest['version']}) ab"
+              )
+          text = pathlib.Path("CHANGELOG.md").read_text(encoding="utf-8")
+          match = re.search(rf"^## {re.escape(tag)}(?: |$).*$", text, re.M)
+          if match is None:
+              raise SystemExit(f"CHANGELOG.md enthält keinen Abschnitt {tag}")
+          rest = text[match.end() :]
+          naechster = re.search(r"^## ", rest, re.M)
+          body = (rest[: naechster.start()] if naechster else rest).strip()
+          pathlib.Path("release-notes.md").write_text(body + "\n", encoding="utf-8")
+          vorab = bool(re.search(r"-(?:beta|rc)\.\d+$", version))
+          with pathlib.Path(os.environ["GITHUB_OUTPUT"]).open("a", encoding="utf-8") as ausgabe:
+              ausgabe.write(f"prerelease={str(vorab).lower()}\n")
+          PY
+      - name: ZIP bauen
+        run: |
+          mkdir -p dist
+          zip -r dist/ferien.zip custom_components/ferien -x '*__pycache__*' '*.pyc'
+      - name: GitHub-Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          VORAB: ${{ steps.version.outputs.prerelease }}
+        run: |
+          args=(release create "$GITHUB_REF_NAME" dist/ferien.zip --title "$GITHUB_REF_NAME" --notes-file release-notes.md)
+          if [ "$VORAB" = "true" ]; then
+            args+=(--prerelease)
+          fi
+          gh "${args[@]}"

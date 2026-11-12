@@ -1,0 +1,34 @@
+blueprint:
+  name: Ranzen-Erinnerung
+  description: >
+    Erinnerung am Vorabend, wenn der Sensor Erster Schultag auf morgen zeigt.
+    Die Zeitzone von Home Assistant sollte Europe/Berlin sein.
+  domain: automation
+  author: Ferien
+  input:
+    uhrzeit:
+      name: Uhrzeit
+      default: "18:00:00"
+      selector:
+        time:
+    erster_schultag:
+      name: Erster Schultag
+      selector:
+        entity:
+          filter:
+            - integration: ferien
+              domain: sensor
+    aktionen:
+      name: Aktionen
+      selector:
+        action:
+variables:
+  sensor_erster: !input erster_schultag
+triggers:
+  - trigger: time
+    at: !input uhrzeit
+conditions:
+  - condition: template
+    value_template: >-
+      {{ states(sensor_erster) == (now() + timedelta(days=1)).date().isoformat() }}
+actions: !input aktionen

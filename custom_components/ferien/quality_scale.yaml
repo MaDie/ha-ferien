@@ -1,0 +1,86 @@
+rules:
+  # Bronze
+  action-setup: done
+  appropriate-polling: done
+  brands: done
+  common-modules: done
+  config-flow-test-coverage: done
+  config-flow: done
+  dependency-transparency: done
+  docs-actions: done
+  docs-conditions:
+    status: exempt
+    comment: Die Integration stellt keine Conditions bereit.
+  docs-high-level-description: done
+  docs-installation-instructions: done
+  docs-removal-instructions: done
+  docs-triggers:
+    status: exempt
+    comment: Die Integration stellt keine Trigger bereit.
+  entity-event-setup:
+    status: done
+    comment: Entitäten abonnieren nichts selbst. Zeitpläne liegen im Coordinator.
+  entity-unique-id: done
+  has-entity-name: done
+  runtime-data: done
+  test-before-configure: done
+  test-before-setup: done
+  unique-config-entry: done
+
+  # Silver
+  action-exceptions: done
+  config-entry-unloading: done
+  docs-configuration-parameters: done
+  docs-installation-parameters: done
+  entity-unavailable: done
+  integration-owner: done
+  log-when-unavailable: done
+  parallel-updates: done
+  reauthentication-flow:
+    status: exempt
+    comment: Die API verlangt keinen Schlüssel und keine Anmeldung.
+  test-coverage: done
+
+  # Gold
+  devices: done
+  diagnostics: done
+  discovery:
+    status: exempt
+    comment: Das Bundesland wählt der Nutzer. Es gibt nichts zu entdecken.
+  discovery-update-info:
+    status: exempt
+    comment: Keine automatische Erkennung, deren Daten nachgezogen werden müssten.
+  docs-data-update: done
+  docs-examples: done
+  docs-known-limitations: done
+  docs-supported-devices:
+    status: exempt
+    comment: Keine Hardware. Ein Dienst-Gerät je Bundesland.
+  docs-supported-functions: done
+  docs-troubleshooting: done
+  docs-use-cases: done
+  dynamic-devices:
+    status: exempt
+    comment: Genau ein Dienst-Gerät je Eintrag, keine weiteren Geräte.
+  entity-category: done
+  entity-device-class: done
+  entity-disabled-by-default:
+    status: done
+    comment: Alle Entitäten sind für den normalen Gebrauch gedacht, auch die Diagnosewerte.
+  entity-translations: done
+  exception-translations: done
+  icon-translations: done
+  reconfiguration-flow: done
+  repair-issues: done
+  stale-devices:
+    status: exempt
+    comment: Genau ein Dienst-Gerät je Eintrag. Es entstehen keine verwaisten Geräte.
+
+  # Platinum
+  async-dependency: done
+  inject-websession: done
+  strict-typing:
+    status: done
+    comment: >
+      mypy --strict läuft in der CI für custom_components/ferien.
+      Die Core-Marke .strict-typing gilt nur für Integrationen im HA-Core.

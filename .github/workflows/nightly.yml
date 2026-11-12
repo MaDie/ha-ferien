@@ -1,0 +1,144 @@
+name: Nightly
+
+on:
+  schedule:
+    - cron: "30 2 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+concurrency:
+  group: nightly-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  ha-beta:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7.0.1
+      - uses: actions/setup-python@v7.1.0
+        with:
+          python-version: "3.14"
+      - name: HA-Beta
+        run: |
+          python -m pip install --upgrade pip
+          pip install --pre pytest-homeassistant pytest-cov==7.1.0
+          pytest
+      - name: Issue bei Fehler
+        if: failure()
+        uses: actions/github-script@v9.0.0
+        with:
+          script: |
+            const title = "Tests gegen HA-Beta fehlgeschlagen";
+            const label = "ha-kompatibilitaet";
+            await oeffne(github, context, title, label);
+
+            async function oeffne(github, context, title, label) {
+              try {
+                await github.rest.issues.createLabel({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  name: label,
+                  color: "b60205",
+                });
+              } catch (error) {
+                if (error.status !== 422) throw error;
+              }
+              const liste = await github.rest.issues.listForRepo({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                state: "open",
+                labels: label,
+              });
+              const body = `Lauf: ${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
+              const vorhanden = liste.data.find((issue) => issue.title === title);
+              if (vorhanden) {
+                await github.rest.issues.createComment({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: vorhanden.number,
+                  body,
+                });
+                return;
+              }
+              await github.rest.issues.create({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                title,
+                body,
+                labels: [label],
+              });
+            }
+
+  ha-dev:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v7.0.1
+      - uses: actions/setup-python@v7.1.0
+        with:
+          python-version: "3.14"
+      - name: HA-dev
+        run: |
+          python -m pip install --upgrade pip
+          pip install pytest-cov==7.1.0
+          pip install "git+https://github.com/home-assistant/core.git@dev#egg=homeassistant"
+          pip install --pre pytest-homeassistant || true
+          pytest
+
+  vertrag:
+    if: vars.API_LIVE == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7.0.1
+      - uses: actions/setup-python@v7.1.0
+        with:
+          python-version: "3.14"
+      - run: pip install -r requirements_test.txt
+      - name: Vertrag gegen die Live-API
+        env:
+          API_LIVE: "true"
+        run: pytest -m contract -o addopts=
+      - name: Issue bei Fehler
+        if: failure()
+        uses: actions/github-script@v9.0.0
+        with:
+          script: |
+            const title = "API-Vertrag von schulferienrechner.de verletzt";
+            const label = "api-vertrag";
+            try {
+              await github.rest.issues.createLabel({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                name: label,
+                color: "fbca04",
+              });
+            } catch (error) {
+              if (error.status !== 422) throw error;
+            }
+            const liste = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: "open",
+              labels: label,
+            });
+            const body = `Lauf: ${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
+            const vorhanden = liste.data.find((issue) => issue.title === title);
+            if (vorhanden) {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: vorhanden.number,
+                body,
+              });
+            } else {
+              await github.rest.issues.create({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                title,
+                body,
+                labels: [label],
+              });
+            }

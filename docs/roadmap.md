@@ -13,25 +13,25 @@ Reihenfolge ist verbindlich. Details: `docs/plan.md`, Regeln: `AGENTS.md`.
 - [ ] Schema-Check gegen `openapi.json` in der Website-Pipeline
 
 ## M1 – v0.1 als HACS Custom Repository (3–4 Tage)
-- [ ] `pyproject.toml`, `requirements_test.txt`, Workflows laut `docs/ci-cd.md`
-- [ ] Fixtures aus der echten API (oder vor M0 laut Vertrag in `AGENTS.md`)
-- [ ] `api.py`, `logic.py`, `coordinator.py` mit Store-Cache, ETag, Mitternachtswechsel
-- [ ] Config Flow (ein Eintrag je Bundesland, Vorbelegung über `/api/region`)
-- [ ] `binary_sensor`: `schulfrei_*`, `ferien_*`, `feiertag_*`
-- [ ] `sensor`: `naechste_ferien`, `tage_bis_ferien`, Diagnose-Sensoren
-- [ ] `calendar`
-- [ ] Übersetzungen de/en, `hacs.json`, `brand/icon.png`
-- [ ] Pflichttests grün, Quality Scale Bronze
+- [x] `pyproject.toml`, `requirements_test.txt`, Workflows laut `docs/ci-cd.md`
+- [x] Fixtures aus der echten API (oder vor M0 laut Vertrag in `AGENTS.md`)
+- [x] `api.py`, `logic.py`, `coordinator.py` mit Store-Cache, ETag, Mitternachtswechsel
+- [x] Config Flow (ein Eintrag je Bundesland, Vorbelegung über `/api/region`)
+- [x] `binary_sensor`: `schulfrei_*`, `ferien_*`, `feiertag_*`
+- [x] `sensor`: `naechste_ferien`, `tage_bis_ferien`, Diagnose-Sensoren
+- [x] `calendar`
+- [x] Übersetzungen de/en, `hacs.json`, `brand/icon.png`
+- [x] Pflichttests grün, Quality Scale Bronze
 - [ ] Release v0.1.0 (nach Freigabe durch Matthias), Repo dafür öffentlich schalten (nach Freigabe)
 
 ## M2 – Extras (3 Tage)
-- [ ] Eigene Tage über OptionsFlow und Actions `tag_hinzufuegen`/`tag_entfernen`
-- [ ] `schultage_bis_ferien`, `ferientage_verbleibend`, `letzter_schultag`, `erster_schultag`, `naechster_schultag`, `naechster_feiertag`
-- [ ] Actions `termine_abrufen`, `schultag_pruefen`, `aktualisieren`
-- [ ] Diagnostics, Repairs (14 Tage ohne Update, Daten enden in < 60 Tagen), Reconfigure
-- [ ] Option regionale Feiertage
-- [ ] 3 Blueprints: Schulwecker, Ranzen-Erinnerung, Rollläden
-- [ ] README de + en mit Beispiel-Automationen
+- [x] Eigene Tage über OptionsFlow und Actions `tag_hinzufuegen`/`tag_entfernen`
+- [x] `schultage_bis_ferien`, `ferientage_verbleibend`, `letzter_schultag`, `erster_schultag`, `naechster_schultag`, `naechster_feiertag`
+- [x] Actions `termine_abrufen`, `schultag_pruefen`, `aktualisieren`
+- [x] Diagnostics, Repairs (14 Tage ohne Update, Daten enden in < 60 Tagen), Reconfigure
+- [x] Option regionale Feiertage
+- [x] 3 Blueprints: Schulwecker, Ranzen-Erinnerung, Rollläden
+- [x] README de + en mit Beispiel-Automationen
 
 ## M3 – HACS-Default (1 Tag + Wartezeit)
 - [ ] Quality-Scale-Selbsteinstufung Gold in `quality_scale.yaml`

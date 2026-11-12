@@ -1,6 +1,6 @@
 # CI/CD – Spezifikation
 
-Noch keine Workflow-Dateien im Repo. Anlegen in Meilenstein M1, sobald Code existiert. Diese Datei beschreibt, was die Workflows tun müssen.
+Die Workflows liegen in `.github/workflows/`. Diese Datei beschreibt, was sie tun.
 
 Allgemein für alle Workflows:
 - `permissions: contents: read`, außer `release.yml` (`contents: write`).
@@ -21,6 +21,8 @@ Trigger: `push` auf `main`, `pull_request`, `workflow_dispatch`.
 | `hacs` | `hacs/action` mit `category: integration` prüft HACS-Regeln (Pflicht für HACS-Default) | ja |
 
 Branch-Schutz auf `main`: alle fünf Jobs als Required Checks.
+
+`pytest-homeassistant` 2026.11 ersetzt das frühere `pytest-homeassistant-custom-component`. Die Matrix installiert für 2026.11 das neue Paket und für 2026.10 die letzte Fassung `0.13.375`.
 
 ## 2. `release.yml` – bei Tag `vX.Y.Z`
 

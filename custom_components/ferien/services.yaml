@@ -1,0 +1,79 @@
+tag_hinzufuegen:
+  fields:
+    config_entry_id:
+      required: true
+      selector:
+        config_entry:
+          integration: ferien
+    start:
+      required: true
+      selector:
+        date:
+    ende:
+      required: false
+      selector:
+        date:
+    name:
+      required: true
+      selector:
+        text:
+tag_entfernen:
+  fields:
+    config_entry_id:
+      required: true
+      selector:
+        config_entry:
+          integration: ferien
+    start:
+      required: true
+      selector:
+        date:
+termine_abrufen:
+  fields:
+    config_entry_id:
+      required: true
+      selector:
+        config_entry:
+          integration: ferien
+    von:
+      required: true
+      selector:
+        date:
+    bis:
+      required: true
+      selector:
+        date:
+    typen:
+      required: false
+      selector:
+        select:
+          multiple: true
+          custom_value: true
+          options:
+            - herbstferien
+            - weihnachtsferien
+            - winterferien
+            - osterferien
+            - pfingstferien
+            - sommerferien
+            - schulfrei
+            - feiertag
+            - eigener_tag
+schultag_pruefen:
+  fields:
+    config_entry_id:
+      required: true
+      selector:
+        config_entry:
+          integration: ferien
+    datum:
+      required: true
+      selector:
+        date:
+aktualisieren:
+  fields:
+    config_entry_id:
+      required: false
+      selector:
+        config_entry:
+          integration: ferien

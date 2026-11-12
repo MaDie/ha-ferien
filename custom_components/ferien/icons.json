@@ -1,0 +1,28 @@
+{
+  "entity": {
+    "binary_sensor": {
+      "feiertag_heute": { "default": "mdi:calendar-star" },
+      "feiertag_morgen": { "default": "mdi:calendar-star" },
+      "ferien_heute": { "default": "mdi:beach" },
+      "ferien_morgen": { "default": "mdi:beach" },
+      "schulfrei_heute": { "default": "mdi:school-outline" },
+      "schulfrei_morgen": { "default": "mdi:school-outline" }
+    },
+    "calendar": {
+      "kalender": { "default": "mdi:calendar-month" }
+    },
+    "sensor": {
+      "daten_bis": { "default": "mdi:calendar-end" },
+      "datenstand": { "default": "mdi:database-clock" },
+      "erster_schultag": { "default": "mdi:calendar-start" },
+      "ferientage_verbleibend": { "default": "mdi:counter" },
+      "letzte_aktualisierung": { "default": "mdi:update" },
+      "letzter_schultag": { "default": "mdi:calendar-end" },
+      "naechste_ferien": { "default": "mdi:calendar-arrow-right" },
+      "naechster_feiertag": { "default": "mdi:calendar-star" },
+      "naechster_schultag": { "default": "mdi:school" },
+      "schultage_bis_ferien": { "default": "mdi:counter" },
+      "tage_bis_ferien": { "default": "mdi:counter" }
+    }
+  }
+}

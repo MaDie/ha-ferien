@@ -1,0 +1,20 @@
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    labels:
+      - abhaengigkeiten
+  - package-ecosystem: pip
+    directory: /
+    schedule:
+      interval: weekly
+    labels:
+      - abhaengigkeiten
+    groups:
+      homeassistant:
+        patterns:
+          - homeassistant
+          - pytest-homeassistant
+          - pytest-homeassistant-custom-component

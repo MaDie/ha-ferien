@@ -1,0 +1,39 @@
+[project]
+name = "ha-ferien"
+version = "0.1.0"
+description = "Home-Assistant-Integration für Schulferien und Feiertage"
+requires-python = ">=3.13"
+license = "MIT"
+
+[tool.ruff]
+# py313 ist die älteste Laufzeit (HA 2026.10). py314 schreibt `except A, B`.
+target-version = "py313"
+line-length = 88
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM", "ASYNC", "RUF"]
+ignore = ["RUF001", "RUF002", "RUF003"]
+
+[tool.mypy]
+python_version = "3.14"
+strict = true
+files = ["custom_components/ferien"]
+warn_unused_ignores = true
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
+testpaths = ["tests"]
+pythonpath = ["."]
+addopts = "-p no:respx --cov=custom_components/ferien --cov-report=term-missing --cov-fail-under=95 -m 'not contract'"
+markers = [
+    "contract: Live-Prüfung der API, nur im Nightly",
+]
+
+[tool.coverage.run]
+source = ["custom_components/ferien"]
+branch = false
+
+[tool.coverage.report]
+show_missing = true
+skip_empty = true
