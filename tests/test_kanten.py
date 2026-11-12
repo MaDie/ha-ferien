@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from datetime import date, datetime
+from unittest.mock import patch
 
 import aiohttp
 import probatio
@@ -14,6 +15,7 @@ from homeassistant.config_entries import (
 )
 from homeassistant.const import STATE_ON, STATE_UNAVAILABLE
 from homeassistant.exceptions import HomeAssistantError, ServiceValidationError
+from homeassistant.helpers import issue_registry as ir
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 
 from custom_components.ferien.api import (
@@ -44,10 +46,11 @@ from custom_components.ferien.logic import (
     erster_schultag,
     naechster_schultag,
 )
-from custom_components.ferien.repairs import async_sync_abruf
+from custom_components.ferien.repairs import async_sync_abruf, async_sync_horizont
 from custom_components.ferien.services import _als_datum, _typen, async_setup_services
 from custom_components.ferien.store import parse_cache, parse_tage, termine_als_json
 from tests.hilfe import (
+    MockConfigEntry,
     async_fire_time_changed_exact,
     lade_fixture,
     mock_region,
@@ -444,8 +447,6 @@ async def test_aktualisieren_ohne_eintrag(hass) -> None:
 
 async def test_diagnose_und_repair_ohne_erfolg(hass) -> None:
     """Ein Eintrag ohne Coordinator hat keine Diagnose und kein Abruf-Issue."""
-    from pytest_homeassistant.common import MockConfigEntry
-
     eintrag = MockConfigEntry(
         domain=DOMAIN,
         data={CONF_LAND: "BY"},
@@ -462,6 +463,21 @@ async def test_diagnose_und_repair_ohne_erfolg(hass) -> None:
         letzter_erfolg=None,
         land_name="Bayern",
         heute=date(2026, 11, 11),
+    )
+
+
+async def test_issue_ohne_eintragsbezug(hass) -> None:
+    """Home Assistant 2026.10 legt das Issue ohne config_entry_id an."""
+    with patch("custom_components.ferien.repairs._MIT_EINTRAG", False):
+        async_sync_horizont(
+            hass,
+            entry_id="ferien-alt",
+            daten_bis=date(2026, 12, 1),
+            land_name="Bayern",
+            heute=date(2026, 11, 11),
+        )
+    assert (
+        ir.async_get(hass).async_get_issue(DOMAIN, "daten_enden_ferien-alt") is not None
     )
 
 

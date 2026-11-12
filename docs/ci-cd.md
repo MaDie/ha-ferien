@@ -22,7 +22,7 @@ Trigger: `push` auf `main`, `pull_request`, `workflow_dispatch`.
 
 Branch-Schutz auf `main`: alle fünf Jobs als Required Checks.
 
-`pytest-homeassistant` 2026.11 ersetzt das frühere `pytest-homeassistant-custom-component`. Die Matrix installiert für 2026.11 das neue Paket und für 2026.10 die letzte Fassung `0.13.375`.
+`pytest-homeassistant` 2026.11 ersetzt das frühere `pytest-homeassistant-custom-component`. Die Matrix installiert für 2026.11 das neue Paket und für 2026.10 die letzte Fassung `0.13.375`. Beide Zeilen nutzen Python 3.14, weil Home Assistant 2026.10 Python 3.14.2 verlangt.
 
 ## 2. `release.yml` – bei Tag `vX.Y.Z`
 
@@ -33,7 +33,7 @@ Schritte:
 2. Prüfen, dass `CHANGELOG.md` einen Abschnitt `vX.Y.Z` enthält; diesen Abschnitt als Release-Text verwenden.
 3. Lint, Typen und Tests wie in `ci.yml` erneut laufen lassen (wiederverwendbarer Workflow via `workflow_call`).
 4. GitHub-Release erstellen. Tags mit `-beta.N`/`-rc.N` als Pre-Release markieren.
-5. Optional: ZIP `ferien.zip` aus `custom_components/ferien` anhängen und `hacs.json` um `"zip_release": true, "filename": "ferien.zip"` ergänzen (Entscheidung in M1).
+5. ZIP `ferien.zip` aus `custom_components/ferien` an das Release hängen. `hacs.json` hat `"zip_release": true` und `"filename": "ferien.zip"`. Der Marketplace lädt diese Datei vom Versions-Tag, nicht vom Branch `main`.
 
 HACS liest neue Versionen aus den GitHub-Releases; weitere Schritte sind nicht nötig.
 

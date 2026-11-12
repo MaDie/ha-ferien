@@ -49,6 +49,7 @@ termine_abrufen:
         select:
           multiple: true
           custom_value: true
+          translation_key: termin_typ
           options:
             - herbstferien
             - weihnachtsferien

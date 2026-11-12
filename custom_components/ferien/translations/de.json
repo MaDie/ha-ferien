@@ -192,6 +192,21 @@
       }
     }
   },
+  "selector": {
+    "termin_typ": {
+      "options": {
+        "eigener_tag": "Eigener Tag",
+        "feiertag": "Feiertag",
+        "herbstferien": "Herbstferien",
+        "osterferien": "Osterferien",
+        "pfingstferien": "Pfingstferien",
+        "schulfrei": "Schulfreier Tag",
+        "sommerferien": "Sommerferien",
+        "weihnachtsferien": "Weihnachtsferien",
+        "winterferien": "Winterferien"
+      }
+    }
+  },
   "services": {
     "aktualisieren": {
       "description": "Sofort abrufen. Schlägt der Abruf fehl, bleiben die gespeicherten Daten.",
@@ -237,24 +252,7 @@
       "fields": {
         "bis": { "name": "Bis" },
         "config_entry_id": { "name": "Bundesland" },
-        "typen": {
-          "name": "Typen",
-          "selector": {
-            "select": {
-              "options": {
-                "eigener_tag": "Eigener Tag",
-                "feiertag": "Feiertag",
-                "herbstferien": "Herbstferien",
-                "osterferien": "Osterferien",
-                "pfingstferien": "Pfingstferien",
-                "schulfrei": "Schulfreier Tag",
-                "sommerferien": "Sommerferien",
-                "weihnachtsferien": "Weihnachtsferien",
-                "winterferien": "Winterferien"
-              }
-            }
-          }
-        },
+        "typen": { "name": "Typen" },
         "von": { "name": "Von" }
       },
       "name": "Termine abrufen"

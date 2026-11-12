@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from homeassistant.const import Platform
 from homeassistant.core import HomeAssistant
+from homeassistant.helpers import config_validation as cv
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 from homeassistant.helpers.typing import ConfigType
 
@@ -20,7 +21,15 @@ PLATFORMS: tuple[Platform, ...] = (
     Platform.CALENDAR,
 )
 
-__all__ = ["DOMAIN", "async_remove_entry", "async_setup", "async_setup_entry"]
+CONFIG_SCHEMA = cv.config_entry_only_config_schema(DOMAIN)
+
+__all__ = [
+    "CONFIG_SCHEMA",
+    "DOMAIN",
+    "async_remove_entry",
+    "async_setup",
+    "async_setup_entry",
+]
 
 
 async def async_setup(hass: HomeAssistant, config: ConfigType) -> bool:

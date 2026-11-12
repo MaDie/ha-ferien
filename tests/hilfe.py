@@ -142,6 +142,7 @@ async def richte_ein(
 
 __all__ = [
     "ENTRY_ID",
+    "MockConfigEntry",
     "async_fire_time_changed_exact",
     "feste_abrufzeit",
     "lade_fixture",

@@ -6,6 +6,20 @@ from pathlib import Path
 from typing import Any
 
 import pytest
+from syrupy.assertion import SnapshotAssertion
+
+try:
+    from pytest_homeassistant.syrupy import HomeAssistantSnapshotExtension
+except ImportError:  # pragma: no cover - CI-Matrix 2026.10
+    from pytest_homeassistant_custom_component.syrupy import (
+        HomeAssistantSnapshotExtension,
+    )
+
+
+@pytest.fixture
+def snapshot(snapshot: SnapshotAssertion) -> SnapshotAssertion:
+    """Snapshots liegen in tests/snapshots, auch unter Home Assistant 2026.10."""
+    return snapshot.use_extension(HomeAssistantSnapshotExtension)
 
 
 @pytest.fixture
