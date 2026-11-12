@@ -192,6 +192,21 @@
       }
     }
   },
+  "selector": {
+    "termin_typ": {
+      "options": {
+        "eigener_tag": "Custom day",
+        "feiertag": "Public holiday",
+        "herbstferien": "Autumn holidays",
+        "osterferien": "Easter holidays",
+        "pfingstferien": "Whitsun holidays",
+        "schulfrei": "School-free day",
+        "sommerferien": "Summer holidays",
+        "weihnachtsferien": "Christmas holidays",
+        "winterferien": "Winter holidays"
+      }
+    }
+  },
   "services": {
     "aktualisieren": {
       "description": "Download now. If the download fails, the cached data stays.",
@@ -237,24 +252,7 @@
       "fields": {
         "bis": { "name": "Until" },
         "config_entry_id": { "name": "State" },
-        "typen": {
-          "name": "Types",
-          "selector": {
-            "select": {
-              "options": {
-                "eigener_tag": "Custom day",
-                "feiertag": "Public holiday",
-                "herbstferien": "Autumn holidays",
-                "osterferien": "Easter holidays",
-                "pfingstferien": "Whitsun holidays",
-                "schulfrei": "School-free day",
-                "sommerferien": "Summer holidays",
-                "weihnachtsferien": "Christmas holidays",
-                "winterferien": "Winter holidays"
-              }
-            }
-          }
-        },
+        "typen": { "name": "Types" },
         "von": { "name": "From" }
       },
       "name": "Get dates"
