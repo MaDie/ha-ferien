@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Das Release-ZIP enthält die Integrationsdateien im Archiv-Wurzel, damit HACS `manifest.json` findet.
+
 ## v0.1.0 – 2026-11-12
 
 - Ein fehlgeschlagener Abruf setzt die Entitäten auf `unavailable`. Der Cache bleibt und gilt nach einem Neustart innerhalb von 24 Stunden wieder.
