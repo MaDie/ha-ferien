@@ -2,11 +2,12 @@
 name = "ha-ferien"
 version = "0.1.0"
 description = "Home-Assistant-Integration für Schulferien und Feiertage"
-requires-python = ">=3.13"
+requires-python = ">=3.14"
 license = "MIT"
 
 [tool.ruff]
-# py313 ist die älteste Laufzeit (HA 2026.10). py314 schreibt `except A, B`.
+# Laufzeit ist Python 3.14 (HA 2026.10 und 2026.11). Ziel bleibt py313,
+# damit except-Klammern nicht in die 3.14-Schreibweise ohne Klammern fallen.
 target-version = "py313"
 line-length = 88
 
