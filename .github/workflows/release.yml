@@ -51,8 +51,30 @@ jobs:
           PY
       - name: ZIP bauen
         run: |
-          mkdir -p dist
-          zip -r dist/ferien.zip custom_components/ferien -x '*__pycache__*' '*.pyc'
+          python - <<'PY'
+          import pathlib
+          import zipfile
+
+          quelle = pathlib.Path("custom_components/ferien")
+          ziel = pathlib.Path("dist/ferien.zip")
+          ziel.parent.mkdir(parents=True, exist_ok=True)
+          with zipfile.ZipFile(ziel, "w", compression=zipfile.ZIP_DEFLATED) as archiv:
+              for pfad in sorted(quelle.rglob("*")):
+                  if not pfad.is_file():
+                      continue
+                  if "__pycache__" in pfad.parts or pfad.suffix == ".pyc":
+                      continue
+                  archiv.write(pfad, pfad.relative_to(quelle).as_posix())
+          with zipfile.ZipFile(ziel) as archiv:
+              namen = [name for name in archiv.namelist() if not name.endswith("/")]
+          if "manifest.json" not in namen or any(
+              name.startswith("custom_components/") for name in namen
+          ):
+              raise SystemExit(
+                  "ferien.zip muss manifest.json im Wurzel haben, "
+                  "ohne Ordner custom_components/"
+              )
+          PY
       - name: GitHub-Release
         env:
           GH_TOKEN: ${{ github.token }}

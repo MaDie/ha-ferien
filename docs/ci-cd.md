@@ -33,7 +33,7 @@ Schritte:
 2. Prüfen, dass `CHANGELOG.md` einen Abschnitt `vX.Y.Z` enthält; diesen Abschnitt als Release-Text verwenden.
 3. Lint, Typen und Tests wie in `ci.yml` erneut laufen lassen (wiederverwendbarer Workflow via `workflow_call`).
 4. GitHub-Release erstellen. Tags mit `-beta.N`/`-rc.N` als Pre-Release markieren.
-5. ZIP `ferien.zip` aus `custom_components/ferien` an das Release hängen. `hacs.json` hat `"zip_release": true` und `"filename": "ferien.zip"`. Der Marketplace lädt diese Datei vom Versions-Tag, nicht vom Branch `main`.
+5. ZIP `ferien.zip` an das Release hängen. Im Archiv liegen die Dateien aus `custom_components/ferien` im Wurzel (`manifest.json` direkt, nicht unter `custom_components/ferien/`), weil HACS das ZIP nach `config/custom_components/ferien/` entpackt. `hacs.json` hat `"zip_release": true` und `"filename": "ferien.zip"`. Der Marketplace lädt diese Datei vom Versions-Tag, nicht vom Branch `main`.
 
 HACS liest neue Versionen aus den GitHub-Releases; weitere Schritte sind nicht nötig.
 
