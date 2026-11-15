@@ -16,6 +16,7 @@
       "datenstand": { "default": "mdi:database-clock" },
       "erster_schultag": { "default": "mdi:calendar-start" },
       "ferientage_verbleibend": { "default": "mdi:counter" },
+      "grund_heute": { "default": "mdi:comment-text-outline" },
       "letzte_aktualisierung": { "default": "mdi:update" },
       "letzter_schultag": { "default": "mdi:calendar-end" },
       "naechste_ferien": { "default": "mdi:calendar-arrow-right" },

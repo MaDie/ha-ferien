@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+## v0.2.0 – 2026-11-15
+
+- Sensor Grund heute zeigt den Namen der Ferien, des Feiertags, des schulfreien oder eigenen Tags. Ohne Namen steht dort Wochenende, in der Systemsprache. An einem Schultag ist der Zustand `unknown`.
+- Quality Scale im Manifest ist Platinum.
 - Das Release-ZIP enthält die Integrationsdateien im Archiv-Wurzel, damit HACS `manifest.json` findet.
 
 ## v0.1.0 – 2026-11-12

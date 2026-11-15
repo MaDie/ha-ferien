@@ -194,6 +194,7 @@ async def test_optionen_und_eigener_tag(hass, aioclient_mock) -> None:
     zustand = hass.states.get("binary_sensor.ferien_by_schulfrei_heute")
     assert zustand.state == "on"
     assert zustand.attributes["grund"] == "eigener_tag"
+    assert hass.states.get("sensor.ferien_by_grund_heute").state == "Wandertag"
 
     menu = await hass.config_entries.options.async_init(eintrag.entry_id)
     form = await hass.config_entries.options.async_configure(

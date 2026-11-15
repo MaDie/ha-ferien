@@ -50,18 +50,17 @@ class FerienBinarySensor(FerienEntity, BinarySensorEntity):
     """Ein Zustand für einen Tag. `unavailable`, wenn er nicht belegt ist."""
 
     def __init__(self, coordinator: FerienCoordinator, spec: _Spec) -> None:
-        """Spec merken."""
         super().__init__(coordinator, spec.key, "binary_sensor")
         self._spec = spec
 
     @property
     def available(self) -> bool:
-        """Aus, nur wenn der Cache den Tag wirklich kennt."""
+        """Verfügbar, wenn der Wert für diesen Tag belegt ist."""
         return super().available and self._wert() is not None
 
     @property
     def is_on(self) -> bool:
-        """Wahr, wenn der Tag aus dem genannten Grund frei ist."""
+        """An, wenn das Feld dieses Sensors wahr ist."""
         return self._wert() is True
 
     @property
