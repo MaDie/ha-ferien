@@ -6,15 +6,16 @@ Ein Eintrag ist ein Bundesland. Weitere Länder sind weitere Einträge.
 
 ## Installation
 
-Die Integration ist noch nicht veröffentlicht. Veröffentlichung und HACS-Eintrag erst nach Freigabe.
+In HACS als benutzerdefiniertes Repository hinzufügen: `https://github.com/MaDie/ha-ferien`. Installiert wird `ferien.zip` vom Release.
 
-Bis dahin lokal nach `config/custom_components/ferien` kopieren und Home Assistant neu starten. Unter **Einstellungen → Geräte & Dienste → Integration hinzufügen** „Ferien“ wählen.
+Danach unter **Einstellungen → Geräte & Dienste → Integration hinzufügen** „Ferien“ wählen.
 
 Unterstützt werden die aktuelle stabile Home-Assistant-Version und die vorherige Minor-Version. `hacs.json` nennt die älteste.
 
 ## Was sie meldet
 
 - Schulfrei heute und morgen, mit Grund: Wochenende, Ferien, Feiertag, schulfreier Tag oder eigener Tag
+- Grund heute: Name der Ferien, des Feiertags, des schulfreien oder eigenen Tags. Ohne Namen steht dort Wochenende. An einem Schultag ist der Zustand `unknown`
 - Ferien und Feiertage getrennt, jeweils heute und morgen
 - Nächste Ferien, Tage und Schultage bis dahin, verbleibende Ferientage
 - Letzter, erster und nächster Schultag, nächster Feiertag
@@ -77,7 +78,7 @@ Anweisungen: [AGENTS.md](AGENTS.md). Plan: [docs/plan.md](docs/plan.md), Roadmap
 
 ## English
 
-One config entry is one German state. The integration reports whether today and tomorrow are school-free, and why, plus the next holiday block, school-day countdowns and a calendar. Dates are calculated in Europe/Berlin. A missing dataset becomes `unavailable` or `unknown`, never “off”.
+One config entry is one German state. The integration reports whether today and tomorrow are school-free, and why. The reason today is the name from the data, or “Weekend” when there is no name. On a school day that sensor is `unknown`. It also reports the next holiday block, school-day countdowns and a calendar. Dates are calculated in Europe/Berlin. A missing dataset becomes `unavailable` or `unknown`, never “off”.
 
 Data comes only from schulferienrechner.de. It is derived from the OpenHolidays API under ODbL 1.0 and is not an official source.
 
@@ -87,7 +88,7 @@ Reconfigure keeps the entities. The `entity_id` keeps the previous state code un
 
 `unavailable` or `unknown` means there is no data for that date, or the last download failed. It does not mean school is in session. The first setup waits instead of creating an entry when there is neither network nor cache. `ferien.aktualisieren` fetches immediately. Custom days are replaced and removed by their start date. Automations that compute “tomorrow” use Home Assistant’s time zone, which should be Europe/Berlin.
 
-The integration is not published yet.
+Install through HACS as a custom repository. The release asset is `ferien.zip`.
 
 ## Lizenz
 

@@ -51,6 +51,7 @@ SENSOR_KEYS: Final = (
     "tage_bis_ferien",
     "schultage_bis_ferien",
     "ferientage_verbleibend",
+    "grund_heute",
 )
 DIAGNOSE_KEYS: Final = (
     "datenstand",

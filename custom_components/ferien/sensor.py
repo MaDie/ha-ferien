@@ -8,11 +8,15 @@ from homeassistant.components.sensor import SensorDeviceClass, SensorEntity
 from homeassistant.const import EntityCategory, UnitOfTime
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
+from homeassistant.helpers.translation import async_get_translations
 
-from .const import DIAGNOSE_KEYS
+from .const import DIAGNOSE_KEYS, DOMAIN
 from .coordinator import FerienConfigEntry, FerienCoordinator, Lage
 from .entity import FerienEntity
 from .logic import (
+    Grund,
+    TagBild,
+    anzeige_grund,
     erster_schultag,
     ferientage_verbleibend,
     im_datenbereich,
@@ -21,8 +25,11 @@ from .logic import (
     naechster_feiertag,
     naechster_schultag,
     schultage_bis_ferien,
+    tag_bild,
     tage_bis_ferien,
 )
+
+_WOCHENENDE = "component.ferien.entity.sensor.grund_heute.state.wochenende"
 
 PARALLEL_UPDATES = 0
 
@@ -50,7 +57,14 @@ async def async_setup_entry(
 ) -> None:
     """Sensoren anlegen."""
     coordinator = entry.runtime_data.coordinator
-    async_add_entities(FerienSensor(coordinator, key) for key in _KEYS)
+    texte = await async_get_translations(hass, hass.config.language, "entity", {DOMAIN})
+    wochenende = texte.get(_WOCHENENDE) or Grund.WOCHENENDE.value
+    async_add_entities(
+        [
+            *(FerienSensor(coordinator, key) for key in _KEYS),
+            FerienGrundSensor(coordinator, wochenende),
+        ]
+    )
 
 
 class FerienSensor(FerienEntity, SensorEntity):
@@ -131,3 +145,51 @@ def _wert(lage: Lage, key: str) -> date | datetime | int | None:
     if key == "daten_bis":
         return termine.bis
     return None
+
+
+class FerienGrundSensor(FerienEntity, SensorEntity):
+    """Warum heute schulfrei ist. An einem Schultag `unknown`."""
+
+    def __init__(self, coordinator: FerienCoordinator, wochenende: str) -> None:
+        super().__init__(coordinator, "grund_heute", "sensor")
+        self._wochenende = wochenende
+
+    @property
+    def available(self) -> bool:
+        """Verfügbar, sobald feststeht, ob heute schulfrei ist."""
+        if not super().available:
+            return False
+        bild = self._bild()
+        return bild is not None and bild.schulfrei is not None
+
+    @property
+    def native_value(self) -> str | None:
+        """Name aus den Daten. Wochenende in der Systemsprache."""
+        bild = self._bild()
+        if bild is None:
+            return None
+        text = anzeige_grund(bild)
+        if text is None:
+            return None
+        if text == Grund.WOCHENENDE.value:
+            return self._wochenende
+        return text
+
+    @property
+    def extra_state_attributes(self) -> dict[str, str] | None:
+        """Stabiler Schlüssel, unabhängig vom Anzeigetext."""
+        bild = self._bild()
+        if bild is None or bild.grund is None or bild.schulfrei is not True:
+            return None
+        return {"grund": bild.grund.value}
+
+    def _bild(self) -> TagBild | None:
+        if not self.coordinator.last_update_success:
+            return None
+        lage = self.coordinator.data
+        return tag_bild(
+            lage.heute,
+            lage.termine,
+            lage.eigene_tage,
+            regionale=lage.regionale_feiertage,
+        )

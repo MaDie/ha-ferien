@@ -238,6 +238,19 @@ def tag_bild(
     )
 
 
+def anzeige_grund(bild: TagBild) -> str | None:
+    """Lesbarer Grund, wenn der Tag schulfrei ist.
+
+    Wochenende hat keinen Namen in den Daten und liefert `wochenende`.
+    Sonst der Name der Ferien, des Feiertags, des schulfreien oder eigenen Tags.
+    """
+    if bild.schulfrei is not True or bild.grund is None:
+        return None
+    if bild.grund is Grund.WOCHENENDE or not bild.name:
+        return bild.grund.value
+    return bild.name
+
+
 def ist_schultag(
     tag: date,
     termine: Termine,
@@ -245,7 +258,7 @@ def ist_schultag(
     *,
     regionale: bool,
 ) -> bool:
-    """Schultag nur, wenn der Tag belegt schulfrei ist."""
+    """Schultag, wenn `schulfrei` ausdrücklich falsch ist. `None` zählt nicht."""
     return tag_bild(tag, termine, eigene, regionale=regionale).schulfrei is False
 
 

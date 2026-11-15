@@ -99,6 +99,24 @@
       "datenstand": { "name": "Datenstand" },
       "erster_schultag": { "name": "Erster Schultag" },
       "ferientage_verbleibend": { "name": "Ferientage verbleibend" },
+      "grund_heute": {
+        "name": "Grund heute",
+        "state": {
+          "wochenende": "Wochenende"
+        },
+        "state_attributes": {
+          "grund": {
+            "name": "Grund",
+            "state": {
+              "eigener_tag": "Eigener Tag",
+              "feiertag": "Feiertag",
+              "ferien": "Ferien",
+              "schulfrei": "Schulfreier Tag",
+              "wochenende": "Wochenende"
+            }
+          }
+        }
+      },
       "letzte_aktualisierung": { "name": "Letzte Aktualisierung" },
       "letzter_schultag": { "name": "Letzter Schultag" },
       "naechste_ferien": {

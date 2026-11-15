@@ -94,6 +94,7 @@ States sind nie `Ja`/`Nein`-Strings. Datumssensoren nutzen `SensorDeviceClass.DA
 | `tage_bis_ferien` | Tage (Kalendertage bis `frei_von`) | |
 | `schultage_bis_ferien` | Tage (Schultage ohne heute) | |
 | `ferientage_verbleibend` | Tage (in laufenden Ferien inkl. heute bis `frei_bis`, sonst 0) | |
+| `grund_heute` | Text: Name aus den Daten, sonst `Wochenende` in der Systemsprache. Schultag: `unknown` | `grund` (Schlüssel) |
 | `datenstand` | Zeitstempel, `EntityCategory.DIAGNOSTIC` | |
 | `letzte_aktualisierung` | Zeitstempel, Diagnose | |
 | `daten_bis` | Datum, Diagnose | |
@@ -185,7 +186,7 @@ Erwartetes Format von `/termine` (Fixture-Vorlage):
 - Entitäten erben von `CoordinatorEntity`; keine eigenen Polls pro Entität.
 - Logging: `_LOGGER = logging.getLogger(__name__)`, keine Daten-Dumps auf `info`.
 - Alle Nutzertexte in `strings.json`/`translations/` (de + en). Keine hartcodierten Strings in Python.
-- Quality Scale: **Silver** für v0.1, **Gold** als Ziel (Diagnostics, Repairs, Reconfigure, Übersetzungen, Icons, Entity-Kategorien). Status in `quality_scale.yaml` pflegen (`done`/`todo`/`exempt` mit Begründung). Platinum nur, wenn strict typing und injizierte Session erfüllt sind.
+- Quality Scale: **Platinum**. Status in `quality_scale.yaml` pflegen (`done`/`todo`/`exempt` mit Begründung). Strict typing und die injizierte Session bleiben Pflicht dafür.
 
 ## Tests
 

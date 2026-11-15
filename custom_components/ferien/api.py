@@ -30,7 +30,6 @@ class ApiError(Exception):
     """Die API hat geantwortet, aber nicht brauchbar."""
 
     def __init__(self, message: str, *, status: int | None = None) -> None:
-        """Status fürs Log merken."""
         super().__init__(message)
         self.status = status
 
@@ -39,7 +38,6 @@ class RateLimited(ApiError):
     """HTTP 429. `retry_after` ist eine Wartezeit in Sekunden."""
 
     def __init__(self, retry_after: float) -> None:
-        """Wartezeit übernehmen."""
         super().__init__("Zu viele Anfragen", status=429)
         self.retry_after = retry_after
 
@@ -48,7 +46,6 @@ class NotModified(Exception):
     """HTTP 304. Der gespeicherte Datensatz gilt weiter."""
 
     def __init__(self, etag: str | None) -> None:
-        """ETag der unveränderten Antwort merken."""
         super().__init__("nicht geändert")
         self.etag = etag
 

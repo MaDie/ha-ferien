@@ -13,6 +13,7 @@ from custom_components.ferien.logic import (
     BERLIN,
     EigenerTag,
     Grund,
+    anzeige_grund,
     ereignisse,
     erster_schultag,
     ferientage_verbleibend,
@@ -69,6 +70,7 @@ def test_montag_in_den_herbstferien() -> None:
     assert bild.schulfrei is True
     assert bild.grund is Grund.FERIEN
     assert bild.name == "Herbstferien"
+    assert anzeige_grund(bild) == "Herbstferien"
     assert bild.ferien is True
     assert bild.ferien_start == date(2026, 11, 2)
     assert bild.ferien_ende == date(2026, 11, 6)
@@ -83,6 +85,7 @@ def test_sonntag_vor_dem_ersten_schultag() -> None:
     bild = _bild(tag)
     assert bild.schulfrei is True
     assert bild.grund is Grund.WOCHENENDE
+    assert anzeige_grund(bild) == "wochenende"
     assert bild.ferien is False
     assert tage_bis_ferien(tag, TERMINE) == 0
     assert ferientage_verbleibend(tag, TERMINE) == 1
@@ -94,6 +97,7 @@ def test_mittwoch_ist_schultag() -> None:
     tag = date(2026, 11, 11)
     bild = _bild(tag)
     assert bild.schulfrei is False
+    assert anzeige_grund(bild) is None
     assert bild.ferien is False
     assert bild.feiertag is False
     assert tage_bis_ferien(tag, TERMINE) == 43
@@ -115,6 +119,7 @@ def test_buss_und_bettag_ist_kein_feiertag() -> None:
     assert bild.schulfrei is True
     assert bild.grund is Grund.SCHULFREI
     assert bild.name == "Buß- und Bettag"
+    assert anzeige_grund(bild) == "Buß- und Bettag"
     assert bild.ferien is False
     assert bild.feiertag is False
 
