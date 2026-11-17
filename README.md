@@ -44,6 +44,14 @@ Ein Bundeslandwechsel über „Neu konfigurieren“ behält die Entitäten. Die 
 - `ferien.termine_abrufen`, `ferien.schultag_pruefen` (Antwort)
 - `ferien.aktualisieren`
 
+## Karte
+
+Im Dashboard eine Karte hinzufügen und „Ferien heute“ wählen. Als Entität „Schulfrei heute“ des Bundeslands nehmen.
+
+Die Karte zeigt, ob heute Schule ist, und den Grund. Darunter steht klein, ob morgen frei ist. Die Texte folgen der Sprache von Home Assistant.
+
+An einem Schultag steht dort „Heute ist Schule“ und „Grund: Regulärer Schultag“. Ist frei, steht der Name aus „Grund heute“, zum Beispiel Herbstferien oder Wochenende. Unten steht „Morgen frei“ oder „Morgen Schule“. Ohne Daten steht „Keine Daten“.
+
 ## Blueprints
 
 Unter `blueprints/automation/ferien`:
@@ -87,6 +95,8 @@ Download runs once a day between 03:00 and 05:00 local time, even when the last 
 Reconfigure keeps the entities. The `entity_id` keeps the previous state code until you rename it. Removing the entry deletes its entities, custom days and cache.
 
 `unavailable` or `unknown` means there is no data for that date, or the last download failed. It does not mean school is in session. The first setup waits instead of creating an entry when there is neither network nor cache. `ferien.aktualisieren` fetches immediately. Custom days are replaced and removed by their start date. Automations that compute “tomorrow” use Home Assistant’s time zone, which should be Europe/Berlin.
+
+The dashboard card “Ferien heute” shows whether today is a school day and why. A smaller line shows whether tomorrow is free. Add it from the card picker and choose School-free today. On a school day it reads “School today” and “Reason: Regular school day”. Below that: “Free tomorrow” or “School tomorrow”. Without data it reads “No data”.
 
 Install through HACS as a custom repository. The release asset is `ferien.zip`.
 
