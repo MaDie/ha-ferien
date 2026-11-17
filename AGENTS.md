@@ -36,6 +36,8 @@ custom_components/ferien/
   binary_sensor.py
   sensor.py
   calendar.py
+  karte.py             Lovelace-Karte registrieren
+  www/ferien-karte.js  Karte „Ferien heute“
   services.py          Action-Handler
   services.yaml
   diagnostics.py
@@ -101,6 +103,9 @@ States sind nie `Ja`/`Nein`-Strings. Datumssensoren nutzen `SensorDeviceClass.DA
 
 ### calendar
 Eine Entität `calendar.ferien_<land>`: Ferien, schulfreie Tage, eigene Tage, Feiertage (abschaltbar per Option). Ganztägige Events, `end` exklusiv nach HA-Konvention (API liefert `ende` inklusiv, umrechnen!). `uid` = API-`id`.
+
+### Karte
+`custom:ferien-heute-karte`, Registrierung in `karte.py`. Zeigt, ob heute Schule ist, und den Grund. Darunter klein, ob morgen frei ist. Texte de/en nach `hass.language`. Entität im Editor: ein Binärsensor der Integration, aufgelöst über das Gerät (`schulfrei_heute`, `schulfrei_morgen`, `grund_heute`). An einem Schultag: „Heute ist Schule“ und „Grund: Regulärer Schultag“. Ist frei, kommt der Name aus `grund_heute`, sonst aus dem Attribut `name`. Wochenende ohne diesen Sensor: „Wochenende“ bzw. „Weekend“. Fehlende Daten: „Keine Daten“, nie „Schule“.
 
 ### Actions (`services.yaml`, Antwort per `SupportsResponse`)
 | Action | Felder | Wirkung |
