@@ -1,6 +1,7 @@
 {
   "domain": "ferien",
   "name": "Ferien – Schulferien & Feiertage",
+  "after_dependencies": ["frontend", "http"],
   "codeowners": ["@MaDie"],
   "config_flow": true,
   "documentation": "https://github.com/MaDie/ha-ferien",
@@ -9,5 +10,5 @@
   "issue_tracker": "https://github.com/MaDie/ha-ferien/issues",
   "quality_scale": "platinum",
   "requirements": [],
-  "version": "0.2.0"
+  "version": "0.3.0"
 }

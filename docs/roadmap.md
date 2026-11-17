@@ -31,6 +31,7 @@ Reihenfolge ist verbindlich. Details: `docs/plan.md`, Regeln: `AGENTS.md`.
 - [x] Diagnostics, Repairs (14 Tage ohne Update, Daten enden in < 60 Tagen), Reconfigure
 - [x] Option regionale Feiertage
 - [x] 3 Blueprints: Schulwecker, Ranzen-Erinnerung, Rollläden
+- [x] Karte „Ferien heute“ mit Hinweis auf morgen
 - [x] README de + en mit Beispiel-Automationen
 
 ## M3 – HACS-Default (1 Tag + Wartezeit)

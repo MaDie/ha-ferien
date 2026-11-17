@@ -11,6 +11,7 @@ from homeassistant.helpers.typing import ConfigType
 from .api import FerienClient
 from .const import API_BASE_URL, DOMAIN
 from .coordinator import FerienConfigEntry, FerienCoordinator, FerienRuntime
+from .karte import async_karte_registrieren
 from .repairs import async_clear_issues
 from .services import async_setup_services
 from .store import FerienStore
@@ -33,8 +34,9 @@ __all__ = [
 
 
 async def async_setup(hass: HomeAssistant, config: ConfigType) -> bool:
-    """Actions einmalig registrieren."""
+    """Actions und die Karte einmalig registrieren."""
     await async_setup_services(hass)
+    await async_karte_registrieren(hass)
     return True
 
 
