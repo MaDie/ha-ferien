@@ -1,8 +1,8 @@
 {
   "domain": "ferien",
   "name": "Ferien – Schulferien & Feiertage",
-  "codeowners": ["@MaDie"],
   "after_dependencies": ["frontend", "http"],
+  "codeowners": ["@MaDie"],
   "config_flow": true,
   "documentation": "https://github.com/MaDie/ha-ferien",
   "integration_type": "service",
