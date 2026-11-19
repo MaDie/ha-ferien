@@ -3,5 +3,5 @@
 # pytest-homeassistant-custom-component und wird nur in der CI-Matrix installiert.
 pytest-homeassistant==2026.11.1
 pytest-cov==7.1.0
-ruff==0.17.4
+ruff==0.17.5
 mypy==2.4.1
